@@ -1,0 +1,20 @@
+footer {
+    background-color: black;
+    color           : white;
+    justify-content : space-between;
+    padding         : 3.5rem 0;
+    margin-bottom   : 0;
+    transition      : ease-out 1s;
+    font-size       : 20px;
+
+    .foot-media {
+        width          : 15%;
+        display        : flex;
+        justify-content: space-around;
+        margin-right   : 2rem;
+    }
+
+    p {
+        margin-bottom: 0;
+    }
+}
