@@ -1,13 +1,19 @@
 import * as React from "react";
-import "./NavStyle.scss";
+import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
 import NavigationBar from "./NavigationBar"
+import "../assets/css/rootStyle.scss"
 
 function Layout() {
   return (
     <>
       <NavigationBar />
-      <Footer />
+      <div id="page-container">
+        <div className="body">
+          <Outlet />
+        </div>
+        <Footer />
+      </div>
     </>
   );
 }
