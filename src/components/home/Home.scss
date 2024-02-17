@@ -1,0 +1,152 @@
+.content {
+    padding: 0 12rem;
+
+    .alert-top {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem 0;
+        margin: 0 auto;
+        width: 100%;
+        height: auto;
+        background-color: #E3F3FA;
+    }
+
+    .promotion {
+        display: block;
+
+        .banner {
+            align-items: stretch;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 700px;
+            background-image: url(https://c1.facilitron.com/assets/img/header-home-soccerfield.6c1770c5.jpg);
+            background-position: bottom;
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #f7f7f7;
+
+            .search_box {
+                position: absolute;
+                top: 37rem;
+                left: 14rem;
+                max-width: 480px;
+                padding: 3em;
+                z-index: 15;
+                border-radius: 0;
+                box-shadow: 2px 2px 4px rgba(91,96,96,0.4);
+                background-color: #f7f7f7;
+
+                h2 {
+                    margin-bottom: 1.7rem;
+                }
+            }
+
+            .slogan {
+                position: absolute;
+                top: 32rem;
+                left: 37rem;
+                max-width: 700px;
+                z-index: 5;
+                padding: 4rem 4rem 4rem 150px;
+                border-radius: 0;
+                margin-right: 2rem;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                background-color: #2473B3;
+                box-shadow: 2px 2px 4px rgba(91,96,96,0.4);
+
+                h1 {
+                    font-size: 2.25rem;
+                    color: #f7f7f7;
+                    font-weight: 800;
+                    margin-bottom: 1rem;
+                }
+
+                p {
+                    color: #f7f7f7;
+                    font-weight: 800;
+                }
+            }
+        }
+    }
+
+    .ad {
+        margin-top: 0;
+        padding-top: 5rem;
+        padding-bottom: 1rem;
+        background: #f7f7f7;
+        width: 100%;
+        max-width: 100%;
+
+        .box {
+            display: flex;
+            padding: 2rem;
+            background: linear-gradient(65deg, #dff1fc, #f7ffef);
+            box-shadow: var(--box-shadow);
+        }
+    }
+
+    .category {
+        padding-top: 5rem;
+
+        h3 {
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 1.7rem;
+        }
+
+        .subtitle {
+            margin-top: -1.25rem;
+        }
+
+        .list {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+
+            h5 {
+                font-weight: 700;
+                font-size: 1.1rem;
+            }
+
+            .card.main {
+                box-shadow: var(--box-shadow);
+                border-radius: 4px;
+                margin: 1rem;
+            }
+
+            .card {
+                display: block;
+
+                img {
+                    min-height: 200px;
+                    min-width: 200px;
+                }
+            }
+            
+            .card-content {
+                padding: 1rem;
+            }
+        }
+    }
+
+    .popular {
+        padding: 5rem 1.25rem 8rem;
+
+        h3 {
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 1.7rem;
+        }
+
+        .subtitle {
+            margin-top: -1.25rem;
+        }
+    }
+}

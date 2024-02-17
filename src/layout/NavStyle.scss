@@ -1,20 +1,89 @@
+header {
+    .MuiToolbar-root {
+        margin: 0 10rem;
+    }
+
+    .MuiButtonBase-root.MuiButton-root {
+        color: white;
+    }
+}
+
 footer {
+    // position: absolute;
+    // bottom: 0;
+    width: 100%;
     background-color: black;
-    color           : white;
-    justify-content : space-between;
-    padding         : 3.5rem 0;
-    margin-bottom   : 0;
-    transition      : ease-out 1s;
-    font-size       : 20px;
+    color: white;
+    justify-content: space-between;
+    padding: 3.5rem 12rem;
+    margin-bottom: 0;
+    transition: ease-out 1s;
+    font-size: 20px;
+
+    div {
+        margin: 0.75rem 2rem;
+    }
 
     .foot-media {
-        width          : 15%;
-        display        : flex;
-        justify-content: space-around;
-        margin-right   : 2rem;
+        width: 15%;
+        display: flex;
+        margin-right: 2rem;
     }
 
     p {
         margin-bottom: 0;
+    }
+
+    .footer-menu {
+        display: grid;
+        grid-template-areas:
+            "pf fr res ab"
+            "cp cp cp cp";
+        margin-bottom: 3rem;
+
+        h5 {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            list-style: none;
+            margin-bottom: 1rem;
+            
+            &:hover {
+                color: lightblue;
+            }
+        }
+
+        .platform-features {
+            grid-area: pf;
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+        }
+
+        .facility-rentals {
+            grid-area: fr;
+            font-size: .875rem;
+            margin-bottom: 2rem;
+        }
+
+        .resources {
+            grid-area: res;
+            font-size: .875rem;
+            margin-bottom: 2rem;
+        }
+
+        .about-us {
+            grid-area: ab;
+            font-size: .875rem;
+        }
+
+        .copyright {
+            display: flex;
+            justify-content: space-between;
+            grid-area: cp;
+            margin-top: 2rem;
+        }
     }
 }
