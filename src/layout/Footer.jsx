@@ -4,11 +4,10 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import YouTubeIcon from "@mui/icons-material/YouTube";
-import styles from "../assets/css/footer.module.scss";
 
 function Footer() {
   return (
-    <footer className={styles.footer}>
+    <footer className="d-flex flex-column flex-md-row align-items-center">
       <div>
         <h2>Bringing communities and spaces together.</h2>
       </div>
