@@ -55,7 +55,7 @@ export default function NavigationBar(props) {
         <Button
           className="nav-btn"
           variant="outlined"
-          onClick={() => navigate("/register")}
+          onClick={() => navigate("/signup")}
         >
           Register
         </Button>
