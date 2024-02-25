@@ -1,0 +1,41 @@
+.dashboard-page {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px; // Adjust the gap as needed
+    width: 100%;
+    height: 90vh;
+    padding: 1rem;
+  
+    // Style for each box
+    .box {
+      border: 2px solid #008cff;
+      border-radius: 10px;
+      padding: 20px;
+  
+      // Adjust box size and styling as needed
+    }
+  
+    // Merge box 2 and 3
+    .box-2 {
+      grid-column: span 2;
+    }
+  
+    // Additional styling for rows if needed
+    .row {
+      display: flex;
+      justify-content: space-between;
+  
+      // Adjust row styling as needed
+    }
+  }
+  .dashboard-container {
+    display: flex;
+  }
+  
+  .line {
+    width: 100%;
+    height: 1px;
+    background-color: #ccc;
+    margin: 1rem;
+  }
+  
