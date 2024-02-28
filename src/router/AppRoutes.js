@@ -2,7 +2,8 @@ import Home from "../components/home/Home";
 import Layout from "../layout/Layout";
 import LoginPage from "../components/auth/LoginPage";
 import SignUpPage from "../components/auth/SignUpPage";
-
+import DashboardPage from "../components/Manage/Dashboard/DashboardPage";
+import Manage from "../components/Manage/Manage";
 
 const AppRoutes = [
   {
@@ -17,12 +18,22 @@ const AppRoutes = [
   },
   {
     path: "login",
-    element: <LoginPage/>,
+    element: <LoginPage />,
   },
   {
     path: "register",
-    element: <SignUpPage/>,
-  },
+    element: <SignUpPage />,
+  }, 
+  {
+        path: "manage",
+        element: <Manage/>,
+        children: [
+          {
+            path: "",
+            element: <DashboardPage />,
+          },
+        ],
+      },
 ];
 
 export default AppRoutes;
