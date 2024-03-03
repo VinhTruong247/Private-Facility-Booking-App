@@ -17,6 +17,7 @@ import {
   faLifeRing as farLifeRing,
 } from "@fortawesome/free-regular-svg-icons";
 import "./SideBar.scss";
+import "./Manage.scss"
 
 export default function Manage() {
   const [showSignoutPopup, setShowSignoutPopup] = useState(false);
@@ -54,10 +55,10 @@ export default function Manage() {
           </div>
         </div>
       )}
-      <div style={{ display: "flex", flex: 1 }}>
+      <div style={{ display: "flex", height:"80vh" }}>
         <Sidebar handleSignoutClick={handleSignoutClick} />
-        <div id="page-container" style={{ flex: 1 }}>
-          <div className="body">
+        <div className="page-container" style={{width:"100%"}} >
+          <div className="content-body">
             <Outlet />
           </div>
         </div>

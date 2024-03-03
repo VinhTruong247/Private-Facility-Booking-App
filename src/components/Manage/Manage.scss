@@ -1,0 +1,5 @@
+.body {
+    height:fit-content; // Subtracting the height of the TopNavbar
+    overflow-y: auto; // Enable vertical scrolling if content exceeds the available height
+  }
+  
