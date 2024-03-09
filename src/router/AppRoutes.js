@@ -28,17 +28,17 @@ const AppRoutes = [
   {
     path: "register",
     element: <SignUpPage />,
-  }, 
+  },
   {
-        path: "manage",
-        element: <Manage/>,
-        children: [
-          {
-            path: "",
-            element: <DashboardPage />,
-          },
-        ],
+    path: "manage",
+    element: <Manage />,
+    children: [
+      {
+        path: "",
+        element: <DashboardPage />,
       },
+    ],
+  },
 ];
 
 export default AppRoutes;
