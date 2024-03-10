@@ -1,0 +1,44 @@
+.booking-container {
+    background-color: #f2f2f2 (light gray);
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ddd (light gray);
+    border-radius: 5px;
+}
+
+h1 {
+    text-align: center;
+    margin: 0 0 20px 0;
+}
+
+h2 {
+    text-align: center;
+    margin: 0 0 10px 0;
+}
+
+label {
+    font-size: 16px;
+    font-family: arial, sans-serif;
+    color: #333 (dark gray);
+    margin: 0 0 5px 0;
+}
+
+select,
+input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc (light gray);
+    border-radius: 3px;
+}
+
+button {
+    background-color: #4CAF50 (teal);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+}
+
+p {
+    margin: 0 0 5px 0;
+}

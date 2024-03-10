@@ -1,0 +1,100 @@
+$bgColor: #f7f7f7;
+
+.searchList-container {
+    .header {
+        background-color: white;
+
+        .title {
+            font-weight: 500;
+            font-size  : 1.3em;
+        }
+
+    }
+
+    .body {
+        .filterBar {
+
+            .accordion-item {
+                background-color: $bgColor;
+
+                .accordion-button {
+                    background-color: $bgColor;
+                    font-weight     : 500;
+                    font-size       : 0.6em;
+
+                }
+
+            }
+        }
+
+        .course-list {
+            .count {
+                font-weight: 500;
+                font-size  : 1.2em;
+            }
+
+            .course-item {
+                display       : flex;
+                flex-direction: row;
+                border-radius : 0;
+
+                .card-img-top {
+                    height    : 13rem;
+                    width     : 40%;
+                    object-fit: cover;
+                }
+
+                .category {
+                    color    : gray;
+                    font-size: 0.9em;
+                    display  : block;
+                }
+
+                .instructor {
+                    display  : block;
+                    font-size: 0.9em;
+
+                    span {
+                        color: gray;
+                    }
+                }
+
+                .price {
+                    display  : block;
+                    color    : #FF6000;
+                    font-size: 1.4em;
+                }
+
+                .add-btn {
+                    background-color: #FF6000;
+                    border-color    : aliceblue;
+                    color           : aliceblue;
+                    font-weight     : 600;
+
+                    &:hover {
+                        background-color: #a13f02;
+                    }
+                }
+
+                @media screen and (max-width: 992px) {
+                    flex-direction: column;
+                    height        : auto;
+
+                    .card-img-top {
+                        width: 100%;
+                    }
+                }
+            }
+
+        }
+
+        .course-paginate {
+            margin-top: 3rem;
+
+            .MuiPagination-ul {
+
+                justify-content: center;
+            }
+        }
+    }
+}

@@ -4,6 +4,7 @@ import LoginPage from "../components/auth/LoginPage";
 import SignUpPage from "../components/auth/SignUpPage";
 import DashboardPage from "../components/Manage/Dashboard/DashboardPage";
 import Manage from "../components/Manage/Manage";
+import BookingPage from "../components/booking/BookingPage";
 
 const AppRoutes = [
   {
@@ -14,6 +15,10 @@ const AppRoutes = [
         path: "",
         element: <Home />,
       },
+      {
+        path: "facility",
+        element: <BookingPage />,
+      },
     ],
   },
   {
@@ -23,17 +28,17 @@ const AppRoutes = [
   {
     path: "register",
     element: <SignUpPage />,
-  }, 
+  },
   {
-        path: "manage",
-        element: <Manage/>,
-        children: [
-          {
-            path: "",
-            element: <DashboardPage />,
-          },
-        ],
+    path: "manage",
+    element: <Manage />,
+    children: [
+      {
+        path: "",
+        element: <DashboardPage />,
       },
+    ],
+  },
 ];
 
 export default AppRoutes;
