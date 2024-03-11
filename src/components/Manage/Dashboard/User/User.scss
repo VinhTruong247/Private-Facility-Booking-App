@@ -1,69 +1,52 @@
-.courts-container {
+.user-container {
   position: relative;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .label-container {
-  margin-bottom: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-.court-columns {
-  margin-top: 2rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  max-height: 300px;
+.user-list {
+  max-height: 300px; /* Adjust as needed */
   overflow-y: auto;
-}
-.sport-column {
-  display: flex;
-  flex-direction: column;
-  
+  padding-top: 3rem;
+  margin-top: 2rem;
 }
 
-
-.court {
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  padding: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 20px; 
-}
-
-
-.court:hover {
-  background-color: #e0e0e0;
-}
-
-.court-name {
-  font-weight: bold;
+.user-box {
   margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
 }
 
-.court-details {
+.user-box h3 {
+  margin-top: 0;
+  cursor: pointer;
+}
+
+.user-details {
   margin-top: 10px;
 }
 
 .add-button {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
-  background-color: green;
-  color: white;
-  border: none;
-  border-radius: 50%;
+  right: 0;
+  top: 0;
   width: 50px;
   height: 50px;
+  background-color: green;
+  color: white;
+  font-size: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 24px;
+  border-radius: 50%;
   cursor: pointer;
-}
-
-.add-button:hover {
-  background-color: darkgreen;
 }
 
 .modal {
