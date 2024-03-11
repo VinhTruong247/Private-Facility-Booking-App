@@ -1,0 +1,143 @@
+.event-container {
+    position: relative;
+    padding: 20px;
+  }
+  
+  .label-container {
+    margin-bottom: 20px;
+  }
+  
+  .event-list {
+    margin-top: 2rem;
+    max-height: 300px; /* Example height; adjust as needed */
+    overflow-y: auto;
+  }
+  
+  .event {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  
+  .event-name {
+    font-weight: bold;
+  }
+  
+  .event-details {
+    margin-top: 10px;
+    padding-left: 20px;
+    border-left: 2px solid #ccc;
+  }
+  
+  .add-button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .add-button:hover {
+    background-color: darkgreen;
+  }
+  
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+  }
+  
+  .popup-box {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .popup-box h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333333;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .input-group {
+    margin-bottom: 20px;
+  }
+  
+  .confirm-button,
+  .cancel-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .confirm-button {
+    background-color: green;
+    color: white;
+    margin-right: 10px;
+  }
+  
+  .confirm-button:hover {
+    background-color: darkgreen;
+  }
+  
+  .cancel-button {
+    background-color: red;
+    color: white;
+  }
+  
+  .cancel-button:hover {
+    background-color: darkred;
+  }
+  
+  .label {
+    font-size: 14px;
+    color: #666666;
+    margin-bottom: 5px;
+  }
+  
+  .popup-box form {
+    flex-wrap: wrap; /* Allow input fields to wrap */
+    row-gap: 15px; /* Add row gap between input fields */
+  }
+  
+  .input-field {
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    font-size: 14px; /* Decreased font size */
+    color: #333333;
+    transition: border-color 0.3s ease;
+    width: calc(50% - 10px); /* Adjusted width to make input fields shorter */
+  }
+  
+  .input-column {
+    flex: 1;
+    margin-right: 20px;
+  }
+  

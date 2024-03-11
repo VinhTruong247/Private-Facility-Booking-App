@@ -1,40 +1,99 @@
 import React, { useState } from 'react';
 import "./Categories.scss";
 
-export default function Categories() {
+const categoriesData = [
+  {
+    "id": 1,
+    "name": "Football",
+    "description": "A team sport played by a team of 11 players against another team of 11 players on a field"
+  },
+  {
+    "id": 2,
+    "name": "Basketball",
+    "description": "A game played between two teams of five players each on a rectangular court, usually indoors"
+  },
+  {
+    "id": 3,
+    "name": "Badminton",
+    "description": "Court or lawn game played with lightweight rackets and a shuttlecock"
+  },
+  {
+    "id": 4,
+    "name": "Tennis",
+    "description": "A game in which two opposing players (singles) or pairs of players (doubles) use tautly strung rackets to hit a ball of a specified size and weight"
+  },
+  {
+    "id": 5,
+    "name": "Volleyball",
+    "description": "A game played by two teams, usually of six players on a side, in which the players use their hands to bat a ball back and forth over a high net, trying to make the ball touch the court within the opponents playing area before it can be returned"
+  }
+];
+
+function Categories() {
+  const [expandedCategory, setExpandedCategory] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [newCategory, setNewCategory] = useState({
+    name: "",
+    description: ""
+  });
+
+  const toggleExpand = (categoryId) => {
+    setExpandedCategory(expandedCategory === categoryId ? null : categoryId);
+  };
 
   const togglePopup = () => {
     setShowPopup(!showPopup);
   };
 
-  const handleConfirm = () => {
-    // Handle form submission or other actions here
-    togglePopup();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNewCategory({ ...newCategory, [name]: value });
   };
 
-  const handleCancel = () => {
+  const handleConfirm = () => {
+    // Add new category logic here
+    // For now, just log the new category data
+    console.log("New category:", newCategory);
+    // Reset form fields and close popup
+    setNewCategory({ name: "", description: "" });
     togglePopup();
   };
 
   return (
     <div className="category-section">
-      <h2>Categories</h2>
-      <div>Football</div>
-      <div>Tennis</div>
-      <div>Badminton</div>
-      <div>Basketball</div>
-      <div>Volleyball</div>
-      <div className="add-button" onClick={togglePopup}>+</div>
+      <h2 className="category-title">Categories</h2>
+      <div className="category-list">
+        {categoriesData.map((category) => (
+          <div key={category.id} className="category">
+            <div className="category-header" onClick={() => toggleExpand(category.id)}>
+              <div className="category-name">{category.name}</div>
+              <div className="category-toggle">{expandedCategory === category.id ? '-' : '+'}</div>
+            </div>
+            {expandedCategory === category.id && (
+              <div className="category-description">
+                {category.description}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      <button className="add-button" onClick={togglePopup}>+</button>
       {showPopup && (
-        <div className="modal">
-          <div className="popup-box">
+        <div className="popup">
+          <div className="popup-content">
             <h2>Add Category</h2>
-            <form>
-              <input type="text" placeholder="Category Name" />
+            <form onSubmit={(e) => { e.preventDefault(); handleConfirm(); }}>
+              <div className="form-group">
+                <label htmlFor="name">Name:</label>
+                <input type="text" id="name" name="name" value={newCategory.name} onChange={handleChange} />
+              </div>
+              <div className="form-group">
+                <label htmlFor="description">Description:</label>
+                <textarea id="description" name="description" value={newCategory.description} onChange={handleChange} />
+              </div>
               <div className="button-container">
-                <button className="confirm-button" type="button" onClick={handleConfirm}>Confirm</button>
-                <button className="cancel-button" type="button" onClick={handleCancel}>Cancel</button>
+                <button className="confirm-button" type="submit">Confirm</button>
+                <button className="cancel-button" type="button" onClick={togglePopup}>Cancel</button>
               </div>
             </form>
           </div>
@@ -43,3 +102,5 @@ export default function Categories() {
     </div>
   );
 }
+
+export default Categories;
