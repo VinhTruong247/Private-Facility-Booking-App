@@ -11,7 +11,9 @@
 .category-list {
   border: 1px solid #ccc;
   border-radius: 5px;
-  overflow: hidden;
+  max-height: 300px; /* Adjust as needed */
+  overflow-y: auto;
+  margin-top: 3rem;
 }
 
 .category {
