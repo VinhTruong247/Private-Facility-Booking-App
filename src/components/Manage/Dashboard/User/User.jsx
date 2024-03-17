@@ -79,6 +79,8 @@ const sampleUsers = [
 function User() {
   const [expandedUser, setExpandedUser] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [editedUser, setEditedUser] = useState(null);
   const [newUser, setNewUser] = useState({
     username: "",
     password: "",
@@ -94,11 +96,18 @@ function User() {
 
   const togglePopup = () => {
     setShowPopup(!showPopup);
+    setEditMode(false); // Reset edit mode when closing the popup
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewUser({ ...newUser, [name]: value });
+    setEditedUser({ ...editedUser, [name]: value });
+  };
+
+  const handleEdit = (user) => {
+    setEditedUser(user);
+    setEditMode(true);
+    setShowPopup(true);
   };
 
   const handleAddUser = () => {
@@ -115,6 +124,19 @@ function User() {
     });
     setShowPopup(false);
   };
+  const handleConfirmEdit = () => {
+    // Perform edit action here
+    console.log("Edited User:", editedUser);
+    // Reset the form and close the popup
+    setEditedUser(null);
+    setShowPopup(false);
+    setEditMode(false);
+  };
+
+  const handleDelete = (userId) => {
+    // Perform delete action here
+    console.log("Deleted User with ID:", userId);
+  };
   return (
     <div className="user-container">
       <div className="label-container">
@@ -124,9 +146,7 @@ function User() {
       <div className="user-list">
         {sampleUsers.map((user) => (
           <div key={user.id} className="user-box">
-            <h3 onClick={() => toggleExpand(user.id)}>
-              {user.username}
-            </h3>
+            <h3 onClick={() => toggleExpand(user.id)}>{user.username}</h3>
             {expandedUser === user.id && (
               <div className="user-details">
                 <p>Password: {user.password}</p>
@@ -134,91 +154,117 @@ function User() {
                 <p>Phone: {user.phone}</p>
                 <p>Date of Birth: {user.dob}</p>
                 <p>Role ID: {user.roleId}</p>
+                <div className="button-container">
+                {!editMode && (
+                  <button
+                    className="edit-button"
+                    onClick={() => handleEdit(user)}
+                  >
+                    Edit
+                  </button>
+                )}
+                {!editMode && (
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDelete(user.id)}
+                  >
+                    Delete
+                  </button>
+                )}</div>
               </div>
             )}
           </div>
         ))}
       </div>
-      <div className="add-button" onClick={togglePopup}>+</div>
+      <div className="add-button" onClick={togglePopup}>
+        +
+      </div>
 
       {showPopup && (
         <div className="modal">
           <div className="popup-box">
-            <h2>Add User</h2>
+            <h2>{editMode ? "Edit User" : "Add User"}</h2>
             <form>
-              <div className="form-group">
-                <label htmlFor="username">Username:</label>
-                <input
-                  type="text"
-                  name="username"
-                  id="username"
-                  placeholder="Enter username"
-                  value={newUser.username}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="password">Password:</label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Enter password"
-                  value={newUser.password}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="address">Address:</label>
-                <input
-                  type="text"
-                  name="address"
-                  id="address"
-                  placeholder="Enter address"
-                  value={newUser.address}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="phone">Phone:</label>
-                <input
-                  type="text"
-                  name="phone"
-                  id="phone"
-                  placeholder="Enter phone number"
-                  value={newUser.phone}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="dob">Date of Birth:</label>
-                <input
-                  type="text"
-                  name="dob"
-                  id="dob"
-                  placeholder="Enter date of birth"
-                  value={newUser.dob}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="roleId">Role ID:</label>
-                <input
-                  type="text"
-                  name="roleId"
-                  id="roleId"
-                  placeholder="Enter role ID"
-                  value={newUser.roleId}
-                  onChange={handleChange}
-                />
+              <div className="tiny-form">
+                <div className="column-group">
+                  <div className="form-group">
+                    <label htmlFor="username">Username:</label>
+                    <input
+                      type="text"
+                      name="username"
+                      id="username"
+                      placeholder="Enter username"
+                      value={editMode ? editedUser.username : newUser.username}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="address">Address:</label>
+                    <input
+                      type="text"
+                      name="address"
+                      id="address"
+                      placeholder="Enter address"
+                      value={editMode ? editedUser.address : newUser.address}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="dob">Date of Birth:</label>
+                    <input
+                      type="text"
+                      name="dob"
+                      id="dob"
+                      placeholder="Enter date of birth"
+                      value={editMode ? editedUser.dob : newUser.dob}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="column-group">
+                  <div className="form-group">
+                    <label htmlFor="password">Password:</label>
+                    <input
+                      type="password"
+                      name="password"
+                      id="password"
+                      placeholder="Enter password"
+                      value={editMode ? editedUser.password : newUser.password}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="phone">Phone:</label>
+                    <input
+                      type="text"
+                      name="phone"
+                      id="phone"
+                      placeholder="Enter phone number"
+                      value={editMode ? editedUser.phone : newUser.phone}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="roleId">Role ID:</label>
+                    <input
+                      type="text"
+                      name="roleId"
+                      id="roleId"
+                      placeholder="Enter role ID"
+                      value={editMode ? editedUser.roleId : newUser.roleId}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
               </div>
               <div className="button-container">
                 <button
                   className="confirm-button"
                   type="button"
-                  onClick={handleAddUser}
+                  onClick={editMode ? handleConfirmEdit : handleAddUser}
                 >
-                  Confirm
+                  {editMode ? "Confirm Edit" : "Confirm Add"}
                 </button>
                 <button
                   className="cancel-button"

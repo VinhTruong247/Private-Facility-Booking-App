@@ -20,6 +20,13 @@ function DashboardPage() {
         <div className="box box-6"><Event/></div>
         <div className="box box-7">Content for box 7</div>
         <div className="box box-8"><Categories/></div>
+        <div className="box box-9">Content for box 9</div>
+        <div className="box box-10">Content for box 10</div>
+        <div className="box box-11">Content for box 11</div>
+        <div className="box box-12">Content for box 12</div>
+        <div className="box box-13">Content for box 13</div>
+        <div className="box box-14">Content for box 14</div>
+        <div className="box box-15">Content for box 15</div>
       </div>
     </div>
   );

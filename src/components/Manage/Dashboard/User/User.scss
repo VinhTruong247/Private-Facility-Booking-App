@@ -13,8 +13,7 @@
 .user-list {
   max-height: 300px; /* Adjust as needed */
   overflow-y: auto;
-  padding-top: 3rem;
-  margin-top: 2rem;
+  margin-top: 3rem;
 }
 
 .user-box {
@@ -22,6 +21,36 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
+  .edit-button,
+    .delete-button {
+     
+      top: 10px;
+      right: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      margin-left: 10px ;
+      margin-top: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .delete-button {
+      background-color: #dc3545;
+
+      &:hover {
+        background-color: #bd2130;
+      }
+    }
 }
 
 .user-box h3 {
@@ -48,7 +77,10 @@
   border-radius: 50%;
   cursor: pointer;
 }
-
+.button-container{
+  display: flex;
+  align-items: flex-end;
+}
 .modal {
   position: fixed;
   top: 0;
@@ -103,3 +135,11 @@
 .cancel-button:hover {
   background-color: darkred;
 }
+.column-group{
+ display: flex;
+flex-direction: column; 
+}
+.tiny-form{
+  display: flex;
+  gap: 5px;
+ }
