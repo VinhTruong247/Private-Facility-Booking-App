@@ -1,19 +1,21 @@
-.club-container {
+.post-container {
     position: relative;
     padding: 20px;
   }
   
   .label-container {
-    margin-bottom: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
   
-  .club-list {
+  .post-list {
     max-height: 300px;
     overflow-y: auto;
     margin-top: 3rem;
   }
   
-  .club {
+  .post {
     position: relative;
     background-color: #f9f9f9;
     border-radius: 10px;
@@ -22,48 +24,48 @@
     cursor: pointer;
   }
   
-  .club:hover {
-    background-color: #eaeaea; /* Adjusted hover background color */
+  .post:hover {
+    background-color: #eaeaea;
   }
   
-  .club-name {
+  .post-content {
     font-weight: bold;
   }
   
-  .club-details {
+  .post-details {
     padding: 10px;
   }
-
+  
   .button-container {
     display: flex;
     justify-content: flex-end;
-    margin-top: 10px; /* Added margin top */
+    margin-top: 10px;
   }
-
+  
   .edit-button,
   .delete-button {
-    padding: 8px 15px; /* Adjusted button padding */
-    margin-left: 10px; /* Added margin left between buttons */
+    padding: 8px 15px;
+    margin-left: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
   }
-
+  
   .edit-button {
-    background-color: #007bff; /* Changed edit button color */
+    background-color: #007bff;
     color: white;
   }
-
+  
   .delete-button {
-    background-color: #dc3545; /* Changed delete button color */
+    background-color: #dc3545;
     color: white;
   }
-
+  
   .edit-button:hover,
   .delete-button:hover {
-    filter: brightness(0.9); /* Added hover effect */
+    filter: brightness(0.9);
   }
-
+  
   .add-button {
     position: absolute;
     right: 0;
@@ -79,11 +81,11 @@
     border-radius: 50%;
     cursor: pointer;
   }
-
+  
   .add-button:hover {
     background-color: darkgreen;
   }
-
+  
   .modal {
     position: fixed;
     top: 0;
@@ -96,43 +98,40 @@
     align-items: center;
     z-index: 10000;
   }
-
+  
   .popup-box {
     background-color: #ffffff;
     border-radius: 10px;
     padding: 30px;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
   }
-
+  
   .popup-box h2 {
     margin-bottom: 20px;
     font-size: 24px;
     font-weight: bold;
     color: #333333;
   }
-
+  
   .input-group {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-
+    margin-bottom: 20px;
   }
-
-  .input-column {
-    // flex: 1;
-    gap: 10px;
-  }
-
-  .input-column:last-child {
-    margin-right: 0;
-  }
-
+  
   .label {
-    font-size: 14px;
-    color: #666666;
+    display: block;
     margin-bottom: 5px;
+    font-weight: bold;
   }
-
+  
+  textarea,
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
   .confirm-button,
   .cancel-button {
     padding: 10px 20px;
@@ -140,22 +139,19 @@
     border-radius: 5px;
     cursor: pointer;
   }
-
+  
   .confirm-button {
-    background-color: green;
+    background-color: #007bff;
     color: white;
-    margin-right: 10px;
   }
-
-  .confirm-button:hover {
-    background-color: darkgreen;
-  }
-
+  
   .cancel-button {
-    background-color: red;
+    background-color: #dc3545;
     color: white;
   }
-
+  
+  .confirm-button:hover,
   .cancel-button:hover {
-    background-color: darkred;
+    filter: brightness(0.9);
   }
+  

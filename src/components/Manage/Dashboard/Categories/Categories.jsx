@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Categories.scss";
+import styles from "./Categories.module.scss";
 
 const categoriesData = [
   {
@@ -85,35 +85,35 @@ function Categories() {
   };
 
   return (
-    <div className="category-section">
-      <div className="label-container">
-        <h2 className="category-title">Categories</h2>
+    <div className={styles["category-section"]}>
+      <div className={styles["label-container"]}>
+        <h2 className={styles["category-title"]}>Categories</h2>
       </div>
 
-      <div className="category-list">
+      <div className={styles["category-list"]}>
         {categoriesData.map((category) => (
-          <div key={category.id} className="category">
+          <div key={category.id} className={styles["category"]}>
             <div
-              className="category-header"
+              className={styles["category-header"]}
               onClick={() => toggleExpand(category.id)}
             >
-              <div className="category-name">{category.name}</div>
-              <div className="category-toggle">
+              <div className={styles["category-name"]}>{category.name}</div>
+              <div className={styles["category-toggle"]}>
                 {expandedCategory === category.id ? "-" : "+"}
               </div>
             </div>
             {expandedCategory === category.id && (
-              <div className="category-description">
+              <div className={styles["category-description"]}>
                 {category.description}
-                <div className="button-container">
+                <div className={styles["button-container"]}>
                   <button
-                    className="edit-button"
+                    className={styles["edit-button"]}
                     onClick={() => handleEdit(category)}
                   >
                     Edit
                   </button>
                   <button
-                    className="delete-button"
+                    className={styles["delete-button"]}
                     onClick={() => handleDelete(category.id)}
                   >
                     Delete
@@ -124,12 +124,12 @@ function Categories() {
           </div>
         ))}
       </div>
-      <button className="add-button" onClick={togglePopup}>
+      <button className={styles["add-button"]} onClick={togglePopup}>
         +
       </button>
       {showPopup && (
-        <div className="popup">
-          <div className="popup-content">
+        <div className={styles["popup"]}>
+          <div className={styles["popup-content"]}>
             <h2>{editMode ? "Edit Category" : "Add Category"}</h2>
             <form
               onSubmit={(e) => {
@@ -137,7 +137,7 @@ function Categories() {
                 handleConfirm();
               }}
             >
-              <div className="form-group">
+              <div className={styles["form-group"]}>
                 <label htmlFor="name">Name:</label>
                 <input
                   type="text"
@@ -147,7 +147,7 @@ function Categories() {
                   onChange={handleChange}
                 />
               </div>
-              <div className="form-group">
+              <div className={styles["form-group"]}>
                 <label htmlFor="description">Description:</label>
                 <textarea
                   id="description"
@@ -166,12 +166,12 @@ function Categories() {
                   }
                 />
               </div>
-              <div className="button-container">
-                <button className="confirm-button" type="submit">
+              <div className={styles["button-container"]}>
+                <button className={styles["confirm-button"]} type="submit">
                   {editMode ? "Confirm Edit" : "Confirm Add"}
                 </button>
                 <button
-                  className="cancel-button"
+                  className={styles["cancel-button"]}
                   type="button"
                   onClick={togglePopup}
                 >

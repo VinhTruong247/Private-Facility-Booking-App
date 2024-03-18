@@ -1,19 +1,21 @@
-.club-container {
+.areas-container {
     position: relative;
     padding: 20px;
   }
   
   .label-container {
-    margin-bottom: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
   
-  .club-list {
+  .area-list {
     max-height: 300px;
     overflow-y: auto;
     margin-top: 3rem;
   }
   
-  .club {
+  .area {
     position: relative;
     background-color: #f9f9f9;
     border-radius: 10px;
@@ -22,18 +24,23 @@
     cursor: pointer;
   }
   
-  .club:hover {
-    background-color: #eaeaea; /* Adjusted hover background color */
+  .area-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
   }
   
-  .club-name {
+  .area-name {
     font-weight: bold;
   }
   
-  .club-details {
+  .area-details {
     padding: 10px;
+    background-color: #f9f9f9;
   }
-
+  
   .button-container {
     display: flex;
     justify-content: flex-end;

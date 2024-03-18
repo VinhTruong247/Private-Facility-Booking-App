@@ -6,6 +6,9 @@ import Member from "./User/User";
 import VinSlot from "./Vinslot/VinSlot";
 import Club from "./Club/Club";
 import Event from "./EventBox/Event";
+import Areas from "./Areas/Areas";
+import Post from "./PostBox/Post";
+import Roles from "./Roles/Roles";
 
 
 function DashboardPage() {
@@ -18,9 +21,9 @@ function DashboardPage() {
         <div className="box box-4"><Categories/></div>
         <div className="box box-5"><Club/></div>
         <div className="box box-6"><Event/></div>
-        <div className="box box-7">Content for box 7</div>
-        <div className="box box-8"><Categories/></div>
-        <div className="box box-9">Content for box 9</div>
+        <div className="box box-7"><Areas/></div>
+        <div className="box box-8"><Post/></div>
+        <div className="box box-9"><Roles/></div>
         <div className="box box-10">Content for box 10</div>
         <div className="box box-11">Content for box 11</div>
         <div className="box box-12">Content for box 12</div>
