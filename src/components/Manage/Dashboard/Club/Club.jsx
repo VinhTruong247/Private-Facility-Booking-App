@@ -37,7 +37,17 @@ const Club = () => {
     setEditMode(true);
     setShowPopup(true);
   };
-
+  const toggleClubExpansion = (club) => {
+    if (expandedClub === club.id) {
+      setExpandedClub(null);
+    } else {
+      setExpandedClub(club.id);
+    }
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditedClub({ ...editedClub, [name]: value });
+  };
   const handleDelete = (clubId) => {
     // Perform delete action here
     console.log("Deleted Club with ID:", clubId);
@@ -143,17 +153,7 @@ const Club = () => {
     }
   ];
 
-  const toggleClubExpansion = (club) => {
-    if (expandedClub === club.id) {
-      setExpandedClub(null);
-    } else {
-      setExpandedClub(club.id);
-    }
-  };
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEditedClub({ ...editedClub, [name]: value });
-  };
+
 
   return (
     <div className="club-container">

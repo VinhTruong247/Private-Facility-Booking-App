@@ -39,6 +39,10 @@ const Event = () => {
     setNewEvent((prevState) => ({
       ...prevState,
       [name]: formattedValue
+    }))
+    setEditedEvent((prevState) => ({
+      ...prevState,
+      [name]: formattedValue
     }));
   };
   

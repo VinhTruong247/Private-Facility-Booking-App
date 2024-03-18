@@ -68,7 +68,26 @@ const VinSlot = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNewSlot({ ...newSlot, [name]: value });
+    setEditedSlot({ ...editedSlot, [name]: value });
   };
+  const handleEdit = (slot) => {
+    setEditedSlot({
+      ...slot,
+      // Ensure all required fields are set, providing default values if necessary
+      courtName: slot.court.name || "",
+      sportType: slot.court.type || "",
+      createdByUsername: slot.createdBy.username || "",
+      createdByClub: slot.createdBy.club || ""
+    });
+    setEditMode(true);
+    setShowPopup(true);
+  };
+
+  const handleDelete = (slotId) => {
+    // Handle delete action here
+    console.log("Deleted Slot with ID:", slotId);
+  };
+
   const vinSlotsData = [
     {
       id: 106,
@@ -222,23 +241,6 @@ const VinSlot = () => {
     }
     // Add more data as needed
   ];
-  const handleEdit = (slot) => {
-    setEditedSlot({
-      ...slot,
-      // Ensure all required fields are set, providing default values if necessary
-      courtName: slot.court.name || "",
-      sportType: slot.court.type || "",
-      createdByUsername: slot.createdBy.username || "",
-      createdByClub: slot.createdBy.club || ""
-    });
-    setEditMode(true);
-    setShowPopup(true);
-  };
-
-  const handleDelete = (slotId) => {
-    // Handle delete action here
-    console.log("Deleted Slot with ID:", slotId);
-  };
 
  
   return (

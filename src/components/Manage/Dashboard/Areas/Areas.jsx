@@ -23,6 +23,10 @@ const Areas = () => {
       ...prevState,
       [name]: value
     }));
+    setEditedArea((prevState) => ({
+      ...prevState,
+      [name]: value
+    }))
   };
 
   const handleConfirm = () => {

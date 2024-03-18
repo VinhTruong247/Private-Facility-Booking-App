@@ -56,7 +56,8 @@ function Categories() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewCategory({ ...newCategory, [name]: value });
+    setNewCategory({ ...newCategory, [name]: value });  
+    setEditedCategory({ ...editedCategory, [name]: value });
   };
 
   const handleConfirm = () => {

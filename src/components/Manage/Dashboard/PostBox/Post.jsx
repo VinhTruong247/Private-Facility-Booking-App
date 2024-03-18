@@ -23,6 +23,10 @@ const Post = ({ id, content, category, postedBy, vinSlot, expanded, onClick }) =
       ...prevState,
       [name]: value
     }));
+    setEditedPost((prevState) => ({
+        ...prevState,
+        [name]: value
+      }));
   };
 
   const handleConfirm = () => {
