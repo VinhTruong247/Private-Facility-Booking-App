@@ -1,4 +1,4 @@
-.courts-container {
+.vin-slot-container {
   position: relative;
   padding: 20px;
 }
@@ -9,42 +9,61 @@
   left: 0;
 }
 
-.court-columns {
-  margin-top: 2rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  max-height: 300px;
+.vin-slot-list {
+  max-height: 300px; /* Adjust as needed */
   overflow-y: auto;
+  margin-top: 3rem;
 }
 
-.sport-column {
-  display: flex;
-  flex-direction: column;
-}
-
-.court {
+.vin-slot {
   background-color: #f9f9f9;
   border-radius: 10px;
   padding: 15px;
+  margin-bottom: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-bottom: 20px;
 }
 
-.court:hover {
-  background-color: #e0e0e0;
-}
-
-.court-name {
-  font-weight: bold;
+.slot-info {
   margin-bottom: 10px;
 }
 
-.court-details {
-  margin-top: 10px;
+.slot-info div {
+  margin-bottom: 5px;
 }
 
+
+.full-info {
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.confirm-button,
+.cancel-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.confirm-button {
+  background-color: green;
+  color: white;
+  margin-right: 10px;
+}
+
+.confirm-button:hover {
+  background-color: darkgreen;
+}
+
+.cancel-button {
+  background-color: red;
+  color: white;
+}
 .button-container {
   display: flex;
   justify-content: flex-end;
@@ -94,6 +113,38 @@
 .add-button:hover {
   background-color: darkgreen;
 }
+.cancel-button:hover {
+  background-color: darkred;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  margin-right: 10px;
+}
+
+.add-button {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background-color: darkgreen;
+}
 
 .modal {
   position: fixed;
@@ -109,64 +160,21 @@
 }
 
 .popup-box {
-  background-color: #ffffff;
+  background-color: white;
+  padding: 20px;
   border-radius: 10px;
-  padding: 30px;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
 }
 
 .popup-box h2 {
   margin-bottom: 20px;
-  font-size: 24px;
-  font-weight: bold;
-  color: #333333;
 }
 
 .input-group {
   display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-
+  align-items: center;
 }
 
-.input-column {
-  // flex: 1;
-  gap: 10px;
-}
-
-.input-column:last-child {
-  margin-right: 0;
-}
-
-.label {
-  font-size: 14px;
-  color: #666666;
-  margin-bottom: 5px;
-}
-
-.confirm-button,
-.cancel-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.confirm-button {
-  background-color: green;
-  color: white;
-  margin-right: 10px;
-}
-
-.confirm-button:hover {
-  background-color: darkgreen;
-}
-
-.cancel-button {
-  background-color: red;
-  color: white;
-}
-
-.cancel-button:hover {
-  background-color: darkred;
+.input-group input {
+  flex: 1;
+  margin-left: 10px;
 }

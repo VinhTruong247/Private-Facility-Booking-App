@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import "./User.scss";
+import styles from "./User.module.scss"; // Importing the SCSS module
+
 
 const sampleUsers = [
   {
@@ -138,56 +139,57 @@ function User() {
     console.log("Deleted User with ID:", userId);
   };
   return (
-    <div className="user-container">
-      <div className="label-container">
+    <div className={styles["user-container"]}>
+      <div className={styles["label-container"]}>
         <h2>User</h2>
       </div>
 
-      <div className="user-list">
+      <div className={styles["user-list"]}>
         {sampleUsers.map((user) => (
-          <div key={user.id} className="user-box">
+          <div key={user.id} className={styles["user-box"]}>
             <h3 onClick={() => toggleExpand(user.id)}>{user.username}</h3>
             {expandedUser === user.id && (
-              <div className="user-details">
+              <div className={styles["user-details"]}>
                 <p>Password: {user.password}</p>
                 <p>Address: {user.address}</p>
                 <p>Phone: {user.phone}</p>
                 <p>Date of Birth: {user.dob}</p>
                 <p>Role ID: {user.roleId}</p>
-                <div className="button-container">
-                {!editMode && (
-                  <button
-                    className="edit-button"
-                    onClick={() => handleEdit(user)}
-                  >
-                    Edit
-                  </button>
-                )}
-                {!editMode && (
-                  <button
-                    className="delete-button"
-                    onClick={() => handleDelete(user.id)}
-                  >
-                    Delete
-                  </button>
-                )}</div>
+                <div className={styles["button-container"]}>
+                  {!editMode && (
+                    <button
+                      className={styles["edit-button"]}
+                      onClick={() => handleEdit(user)}
+                    >
+                      Edit
+                    </button>
+                  )}
+                  {!editMode && (
+                    <button
+                      className={styles["delete-button"]}
+                      onClick={() => handleDelete(user.id)}
+                    >
+                      Delete
+                    </button>
+                  )}
+                </div>
               </div>
             )}
           </div>
         ))}
       </div>
-      <div className="add-button" onClick={togglePopup}>
+      <div className={styles["add-button"]} onClick={togglePopup}>
         +
       </div>
 
       {showPopup && (
-        <div className="modal">
-          <div className="popup-box">
+        <div className={styles["modal"]}>
+          <div className={styles["popup-box"]}>
             <h2>{editMode ? "Edit User" : "Add User"}</h2>
             <form>
-              <div className="tiny-form">
-                <div className="column-group">
-                  <div className="form-group">
+              <div style={{ display: "flex", gap:"10px" }}>
+                <div className={styles["input-column"]}>
+                  <div className={styles["input-group"]}>
                     <label htmlFor="username">Username:</label>
                     <input
                       type="text"
@@ -198,7 +200,7 @@ function User() {
                       onChange={handleChange}
                     />
                   </div>
-                  <div className="form-group">
+                  <div className={styles["input-group"]}>
                     <label htmlFor="address">Address:</label>
                     <input
                       type="text"
@@ -209,7 +211,7 @@ function User() {
                       onChange={handleChange}
                     />
                   </div>
-                  <div className="form-group">
+                  <div className={styles["input-group"]}>
                     <label htmlFor="dob">Date of Birth:</label>
                     <input
                       type="text"
@@ -221,8 +223,8 @@ function User() {
                     />
                   </div>
                 </div>
-                <div className="column-group">
-                  <div className="form-group">
+                <div className={styles["input-column"]}>
+                  <div className={styles["input-group"]}>
                     <label htmlFor="password">Password:</label>
                     <input
                       type="password"
@@ -233,7 +235,7 @@ function User() {
                       onChange={handleChange}
                     />
                   </div>
-                  <div className="form-group">
+                  <div className={styles["input-group"]}>
                     <label htmlFor="phone">Phone:</label>
                     <input
                       type="text"
@@ -244,8 +246,7 @@ function User() {
                       onChange={handleChange}
                     />
                   </div>
-
-                  <div className="form-group">
+                  <div className={styles["input-group"]}>
                     <label htmlFor="roleId">Role ID:</label>
                     <input
                       type="text"
@@ -258,16 +259,16 @@ function User() {
                   </div>
                 </div>
               </div>
-              <div className="button-container">
+              <div className={styles["button-container"]}>
                 <button
-                  className="confirm-button"
+                  className={styles["confirm-button"]}
                   type="button"
                   onClick={editMode ? handleConfirmEdit : handleAddUser}
                 >
                   {editMode ? "Confirm Edit" : "Confirm Add"}
                 </button>
                 <button
-                  className="cancel-button"
+                  className={styles["cancel-button"]}
                   type="button"
                   onClick={togglePopup}
                 >
@@ -280,6 +281,7 @@ function User() {
       )}
     </div>
   );
+  
 }
 
 export default User;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./VinSlot.scss";
+import styles from "./VinSlot.module.scss";
 
 const VinSlot = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -45,6 +45,11 @@ const VinSlot = () => {
     togglePopup();
   };
 
+  const handleSlotClick = (slot) => {
+    setSelectedSlot(selectedSlot === slot.id ? null : slot.id);
+  };
+
+
   const handleCancel = () => {
     // Reset the form and close the popup
     setNewSlot({
@@ -63,7 +68,26 @@ const VinSlot = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNewSlot({ ...newSlot, [name]: value });
+    setEditedSlot({ ...editedSlot, [name]: value });
   };
+  const handleEdit = (slot) => {
+    setEditedSlot({
+      ...slot,
+      // Ensure all required fields are set, providing default values if necessary
+      courtName: slot.court.name || "",
+      sportType: slot.court.type || "",
+      createdByUsername: slot.createdBy.username || "",
+      createdByClub: slot.createdBy.club || ""
+    });
+    setEditMode(true);
+    setShowPopup(true);
+  };
+
+  const handleDelete = (slotId) => {
+    // Handle delete action here
+    console.log("Deleted Slot with ID:", slotId);
+  };
+
   const vinSlotsData = [
     {
       id: 106,
@@ -217,30 +241,23 @@ const VinSlot = () => {
     }
     // Add more data as needed
   ];
-  const handleEdit = (slot) => {
-    setEditedSlot(slot);
-    setEditMode(true);
-    setShowPopup(true);
-  };
 
-  const handleDelete = (slotId) => {
-    // Handle delete action here
-    console.log("Deleted Slot with ID:", slotId);
-  };
-
+ 
   return (
-    <div className="vin-slot-container">
-      <div className="label-container">
+    <div className={styles["vin-slot-container"]}>
+      <div className={styles["label-container"]}>
         <h2>Vin Slots</h2>
       </div>
-      <div className="vin-slot-list">
+      <div className={styles["vin-slot-list"]}>
         {vinSlotsData.map((slot) => (
           <div
             key={slot.id}
-            className="vin-slot"
-            onClick={() => setSelectedSlot(slot)}
+            className={`${styles["vin-slot"]} ${
+              selectedSlot === slot.id ? styles["selected"] : ""
+            }`}
+            onClick={() => handleSlotClick(slot)}
           >
-            <div className="slot-info">
+            <div className={styles["slot-info"]}>
               <div>
                 <strong>Court:</strong> {slot.court.name}
               </div>
@@ -248,8 +265,8 @@ const VinSlot = () => {
                 <strong>Type:</strong> {slot.court.type}
               </div>
             </div>
-            {selectedSlot && selectedSlot.id === slot.id && (
-              <div className="full-info">
+            {selectedSlot === slot.id && (
+              <div className={styles["full-info"]}>
                 <div>
                   <strong>Capacity:</strong> {slot.capacity}
                 </div>
@@ -268,46 +285,58 @@ const VinSlot = () => {
                 <div>
                   <strong>Club:</strong> {slot.createdBy.club}
                 </div>
-                <div className="button-container">
-                  <button className="edit-button" onClick={() => handleEdit(slot)}>Edit</button>
-                  <button className="delete-button" onClick={() => handleDelete(slot.id)}>Delete</button>
+                <div className={styles["button-container"]}>
+                  <button
+                    className={styles["edit-button"]}
+                    onClick={() => handleEdit(slot)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className={styles["delete-button"]}
+                    onClick={() => handleDelete(slot.id)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             )}
           </div>
         ))}
       </div>
-      <div className="add-button" onClick={togglePopup}>
+      <div className={styles["add-button"]} onClick={togglePopup}>
         +
       </div>
       {showPopup && (
-        <div className="modal">
-          <div className="popup-box">
+        <div className={styles["modal"]}>
+          <div className={styles["popup-box"]}>
             <h2>{editMode ? "Edit Vin Slot" : "Add Vin Slot"}</h2>
             <form>
-              <div className="input-group">
+              <div className={styles["input-group"]}>
                 <label htmlFor="courtName">Court Name:</label>
                 <input
                   type="text"
                   name="courtName"
                   id="courtName"
                   placeholder="Enter court name"
-                  value={editMode ? editedSlot.courtName : newSlot.court.name}
+                  value={editMode ? editedSlot.courtName : newSlot.courtName}
                   onChange={handleChange}
                 />
               </div>
-              <div className="input-group">
+              <div className={styles["input-group"]}>
                 <label htmlFor="sportType">Sport Type:</label>
                 <input
                   type="text"
                   name="sportType"
                   id="sportType"
                   placeholder="Enter sport type"
-                  value={editMode ? editedSlot.sportType : newSlot.court.type}
+                  value={
+                    editMode ? editedSlot.sportType : newSlot.courtType
+                  }
                   onChange={handleChange}
                 />
               </div>
-              <div className="input-group">
+              <div className={styles["input-group"]}>
                 <label htmlFor="capacity">Capacity:</label>
                 <input
                   type="text"
@@ -318,7 +347,7 @@ const VinSlot = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input-group">
+              <div className={styles["input-group"]}>
                 <label htmlFor="status">Status:</label>
                 <input
                   type="text"
@@ -329,7 +358,7 @@ const VinSlot = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input-group">
+              <div className={styles["input-group"]}>
                 <label htmlFor="beginAt">Begin At:</label>
                 <input
                   type="text"
@@ -340,7 +369,7 @@ const VinSlot = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input-group">
+              <div className={styles["input-group"]}>
                 <label htmlFor="endAt">End At:</label>
                 <input
                   type="text"
@@ -351,33 +380,47 @@ const VinSlot = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input-group">
+              <div className={styles["input-group"]}>
                 <label htmlFor="createdByUsername">Created By Username:</label>
                 <input
                   type="text"
                   name="createdByUsername"
                   id="createdByUsername"
                   placeholder="Enter username"
-                  value={editMode ? editedSlot.createdByUsername : newSlot.createdByUsername}
+                  value={
+                    editMode
+                      ? editedSlot.createdByUsername
+                      : newSlot.createdByUsername
+                  }
                   onChange={handleChange}
                 />
               </div>
-              <div className="input-group">
+              <div className={styles["input-group"]}>
                 <label htmlFor="createdByClub">Created By Club:</label>
                 <input
                   type="text"
                   name="createdByClub"
                   id="createdByClub"
                   placeholder="Enter club"
-                  value={editMode ? editedSlot.createdByClub : newSlot.createdByClub}
+                  value={
+                    editMode ? editedSlot.createdByClub : newSlot.createdByClub
+                  }
                   onChange={handleChange}
                 />
               </div>
-              <div className="button-container">
-                <button className="confirm-button" type="button" onClick={handleConfirm}>
+              <div className={styles["button-container"]}>
+                <button
+                  className={styles["confirm-button"]}
+                  type="button"
+                  onClick={handleConfirm}
+                >
                   {editMode ? "Save Changes" : "Add Slot"}
                 </button>
-                <button className="cancel-button" type="button" onClick={handleCancel}>
+                <button
+                  className={styles["cancel-button"]}
+                  type="button"
+                  onClick={handleCancel}
+                >
                   Cancel
                 </button>
               </div>

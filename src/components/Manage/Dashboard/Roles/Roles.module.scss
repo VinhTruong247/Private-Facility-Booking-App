@@ -1,45 +1,51 @@
-.club-container {
+.roles-container {
     position: relative;
     padding: 20px;
   }
   
   .label-container {
-    margin-bottom: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
   
-  .club-list {
+  .role-columns {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
     max-height: 300px;
     overflow-y: auto;
-    margin-top: 3rem;
   }
   
-  .club {
-    position: relative;
+  .role {
     background-color: #f9f9f9;
     border-radius: 10px;
     padding: 15px;
-    margin-bottom: 10px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
   }
   
-  .club:hover {
-    background-color: #eaeaea; /* Adjusted hover background color */
+  .role:hover {
+    background-color: #e0e0e0;
   }
   
-  .club-name {
+  .role-name {
     font-weight: bold;
+    margin-bottom: 10px;
   }
   
-  .club-details {
-    padding: 10px;
+  .role-details {
+    margin-top: 10px;
   }
-
+  
   .button-container {
     display: flex;
     justify-content: flex-end;
     margin-top: 10px; /* Added margin top */
   }
-
+  
   .edit-button,
   .delete-button {
     padding: 8px 15px; /* Adjusted button padding */
@@ -48,22 +54,22 @@
     border-radius: 5px;
     cursor: pointer;
   }
-
+  
   .edit-button {
     background-color: #007bff; /* Changed edit button color */
     color: white;
   }
-
+  
   .delete-button {
     background-color: #dc3545; /* Changed delete button color */
     color: white;
   }
-
+  
   .edit-button:hover,
   .delete-button:hover {
     filter: brightness(0.9); /* Added hover effect */
   }
-
+  
   .add-button {
     position: absolute;
     right: 0;
@@ -79,11 +85,11 @@
     border-radius: 50%;
     cursor: pointer;
   }
-
+  
   .add-button:hover {
     background-color: darkgreen;
   }
-
+  
   .modal {
     position: fixed;
     top: 0;
@@ -96,43 +102,42 @@
     align-items: center;
     z-index: 10000;
   }
-
+  
   .popup-box {
     background-color: #ffffff;
     border-radius: 10px;
     padding: 30px;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
   }
-
+  
   .popup-box h2 {
     margin-bottom: 20px;
     font-size: 24px;
     font-weight: bold;
     color: #333333;
   }
-
+  
   .input-group {
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
-
   }
-
+  
   .input-column {
     // flex: 1;
     gap: 10px;
   }
-
+  
   .input-column:last-child {
     margin-right: 0;
   }
-
+  
   .label {
     font-size: 14px;
     color: #666666;
     margin-bottom: 5px;
   }
-
+  
   .confirm-button,
   .cancel-button {
     padding: 10px 20px;
@@ -140,22 +145,43 @@
     border-radius: 5px;
     cursor: pointer;
   }
-
+  
   .confirm-button {
     background-color: green;
     color: white;
     margin-right: 10px;
   }
-
+  
   .confirm-button:hover {
     background-color: darkgreen;
   }
-
+  
   .cancel-button {
     background-color: red;
     color: white;
   }
-
+  
   .cancel-button:hover {
     background-color: darkred;
   }
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .checkbox-icon {
+    font-size: inherit; /* Set font size to inherit from parent */
+    line-height: 1; /* Ensure proper alignment */
+    cursor: pointer;
+  }
+  
+  
+  .checkbox-icon:hover {
+    color: #333; /* Hover color */
+  }
+  
+  .checkbox-icon.active {
+    color: green; /* Active color */
+  }
+  
+  
