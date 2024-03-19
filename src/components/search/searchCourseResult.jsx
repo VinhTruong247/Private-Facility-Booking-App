@@ -11,27 +11,22 @@ import { useNavigate, useLocation } from "react-router";
 import SearchIcon from "@mui/icons-material/Search";
 import { Col, Container, Row } from "react-bootstrap";
 import FilterBar from "./FilterBar";
-import CourseList from "./courseList";
+import CourtList from "./courseList";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import {
-  getCourseList,
-  getEnrolledCourses,
-} from "../../../service/courseService";
-import { getUserInfo } from "../../../service/userService";
+import { getCourtList } from "../../services/courtService";
 import { useSelector } from "react-redux";
 
 const SearchCourseResult = () => {
   const LIMIT = 5;
-  const userId = useSelector((state) => state.auth.userInfo.id);
   const categoryList = useSelector((state) => state.category.categoryList);
 
-  const [courseList, setCoursesList] = useState([]);
+  const [courtList, setCourtList] = useState([]);
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
   const [totalResult, setTotalResult] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [areaId, setAreaId] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [sortOption, setSortOption] = useState("");
 
@@ -40,112 +35,66 @@ const SearchCourseResult = () => {
 
   const handleChangePage = (e, value) => {
     setLoading(true);
-    if (!sortOption) fetchAllCourses(value, selectedCategory, searchValue);
+    if (!sortOption) fetchAllCourts(value, areaId, searchValue);
     if (sortOption === "createdAt")
-      fetchAllCourses(value, selectedCategory, searchValue, sortOption);
+      fetchAllCourts(value, areaId, searchValue, sortOption);
     if (sortOption === "high")
-      fetchAllCourses(value, selectedCategory, searchValue, "price", true);
+      fetchAllCourts(value, areaId, searchValue, "price", true);
     if (sortOption === "low")
-      fetchAllCourses(value, selectedCategory, searchValue, "price", false);
+      fetchAllCourts(value, areaId, searchValue, "price", false);
   };
 
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!searchValue) return;
     setLoading(true);
-    if (!sortOption) fetchAllCourses(1, selectedCategory, searchValue);
+    if (!sortOption) fetchAllCourts(1, areaId, searchValue);
     if (sortOption === "createdAt")
-      fetchAllCourses(1, selectedCategory, searchValue, sortOption);
+      fetchAllCourts(1, areaId, searchValue, sortOption);
     if (sortOption === "high")
-      fetchAllCourses(1, selectedCategory, searchValue, "price", true);
+      fetchAllCourts(1, areaId, searchValue, "price", true);
     if (sortOption === "low")
-      fetchAllCourses(1, selectedCategory, searchValue, "price", false);
+      fetchAllCourts(1, areaId, searchValue, "price", false);
   };
 
   const handleRefeshList = async () => {
     setSearchValue("");
-    setSelectedCategory("");
+    areaId("");
     setSortOption("");
     setLoading(true);
-    fetchAllCourses();
+    fetchAllCourts();
   };
 
-  const fetchEnrolledCourses = async () => {
-    if (userId) {
-      let res = await getEnrolledCourses(userId);
-      if (res.succeeded) {
-        return res.data;
-      } else return [];
-    }
-    return [];
-  };
-
-  const fetchAllCourses = async (
+  const fetchAllCourts = async (
     currentPage,
-    categoryId,
+    areaId,
     searchValue,
     sortValue,
     sortDescend
   ) => {
     let res = null;
     if (currentPage) {
-      res = await getCourseList(
-        { categoryId, searchValue, sortValue, sortDescend },
+      res = await getCourtList(
+        { areaId, searchValue, sortValue, sortDescend },
         currentPage,
         LIMIT
       );
     } else
-      res = await getCourseList(
-        { categoryId, searchValue, sortValue, sortDescend },
+      res = await getCourtList(
+        { areaId, searchValue, sortValue, sortDescend },
         1,
         LIMIT
       );
-
-    if (res.succeeded) {
-      let enrollList = await fetchEnrolledCourses();
-      let userResArr = await Promise.all(
-        res.data.items.map(async (course) => {
-          return getUserInfo(course.creatorId);
-        })
-      );
-
-      res.data.items.forEach((course, index) => {
-        course.instructor = userResArr[index].data?.username
-          ? userResArr[index].data.username
-          : "Unknown";
-
-        categoryList.forEach((category) => {
-          if (course.categoryId === category.id)
-            course.category = category.name;
-        });
-
-        enrollList.every((item) => {
-          if (item.id === course.id) {
-            course.enrolled = true;
-            return false;
-          }
-          course.enrolled = false;
-          return true;
-        });
-      });
-
-      if (currentPage) setPage(currentPage);
-      setTotalResult(res.data.resultCount);
-      setCount(res.data.totalPages);
-      setCoursesList(res.data.items);
-      setLoading(false);
-    } else toast.error(res.message);
   };
 
   useEffect(() => {
-    if (location.state?.categoryId) {
-      fetchAllCourses(1, location.state.categoryId);
-      setSelectedCategory(location.state.categoryId);
+    if (location.state?.areald) {
+      fetchAllCourts(1, location.state.areaId);
+      setAreaId(location.state.areaId);
     } else if (location.state?.searchValue) {
-      fetchAllCourses(1, null, location.state.searchValue);
+      fetchAllCourts(1, null, location.state.searchValue);
       setSearchValue(location.state.searchValue);
-    } else fetchAllCourses();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    } else fetchAllCourts();
   }, []);
 
   return (
@@ -207,19 +156,19 @@ const SearchCourseResult = () => {
             <Col md={5} lg={4}>
               <FilterBar
                 categoryList={categoryList}
-                fetchAllCourses={fetchAllCourses}
+                fetchAllCourts={fetchAllCourts}
                 setLoading={setLoading}
-                setSelectedCategory={setSelectedCategory}
-                selectedCategory={selectedCategory}
+                setAreaId={setAreaId}
+                areaId={areaId}
                 searchValue={searchValue}
                 setSortOption={setSortOption}
                 sortOption={sortOption}
               />
             </Col>
             <Col md={7} lg={8}>
-              <CourseList
-                fetchAllCourses={fetchAllCourses}
-                courseList={courseList}
+              <CourtList
+                fetchAllCourts={fetchAllCourts}
+                courtList={courtList}
                 totalResult={totalResult}
                 loading={loading}
                 handleRefeshList={handleRefeshList}

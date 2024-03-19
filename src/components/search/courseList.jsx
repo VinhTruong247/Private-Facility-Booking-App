@@ -1,44 +1,16 @@
-import { Button, IconButton, Skeleton } from "@mui/material";
-import facebook from "../../../assets/image/facebook.png";
+import { IconButton, Skeleton } from "@mui/material";
 import Card from "react-bootstrap/Card";
-import { postAddToCart } from "../../../service/paymentService";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../../../redux/slices/cartSlice";
 import { toast } from "react-toastify";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { useNavigate } from "react-router-dom";
 
-const CourseList = (props) => {
-  const userId = useSelector((state) => state.auth.userInfo.id);
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+const CourtList = (props) => {
 
-  const { courseList, loading, totalResult, handleRefeshList } = props;
+  const { courtList, loading, totalResult, handleRefeshList } = props;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const addCourseToCart = async (data) => {
-    if (!isAuthenticated) {
-      navigate("/login");
-      return;
-    }
-    let res = await postAddToCart(
-      {
-        courses: [data.id],
-      },
-      userId
-    );
-    if (res.succeeded) {
-      dispatch(
-        addToCart({
-          ...res.data[0],
-          checked: false,
-        })
-      );
-      toast.success("Course added to cart successfully.");
-    } else toast.error(res.message);
-    return;
-  };
 
   return (
     <div className="course-list ps-md-5 mt-4 mt-md-0">
@@ -56,12 +28,12 @@ const CourseList = (props) => {
         </>
       ) : (
         <>
-          {courseList &&
-            courseList.length > 0 &&
-            courseList.map((item) => {
+          {courtList &&
+            courtList.length > 0 &&
+            courtList.map((item) => {
               return (
                 <Card className="course-item mb-4 p-1 " key={item.id}>
-                  <Card.Img variant="top" src={facebook} />
+                  <Card.Img variant="top"/>
                   <Card.Body>
                     <Card.Title className="course-title">
                       {item.title}
@@ -73,17 +45,6 @@ const CourseList = (props) => {
                       </span>
                       <span className="price">${item.price}</span>
                     </Card.Text>
-
-                    {item.enrolled ? (
-                      <Button className="add-btn px-5">Watch course</Button>
-                    ) : (
-                      <Button
-                        className="add-btn px-5"
-                        onClick={() => addCourseToCart(item)}
-                      >
-                        Add to cart
-                      </Button>
-                    )}
                   </Card.Body>
                 </Card>
               );
@@ -94,4 +55,4 @@ const CourseList = (props) => {
   );
 };
 
-export default CourseList;
+export default CourtList;
