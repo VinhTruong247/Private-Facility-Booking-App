@@ -1,16 +1,10 @@
 import { IconButton, Skeleton } from "@mui/material";
 import Card from "react-bootstrap/Card";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { useNavigate } from "react-router-dom";
 
 const CourtList = (props) => {
 
   const { courtList, loading, totalResult, handleRefeshList } = props;
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   return (
     <div className="course-list ps-md-5 mt-4 mt-md-0">
@@ -36,14 +30,14 @@ const CourtList = (props) => {
                   <Card.Img variant="top"/>
                   <Card.Body>
                     <Card.Title className="course-title">
-                      {item.title}
+                      {item.name}
                     </Card.Title>
                     <Card.Text>
-                      <span className="category">{item.category}</span>
-                      <span className="instructor mt-2">
-                        <span>By</span> <b>{item.instructor}</b>
+                      <span className="category">{item.sportType}</span>
+                      <span className="area mt-2">
+                        <span>By</span> <b>{item.area}</b>
                       </span>
-                      <span className="price">${item.price}</span>
+                      <span className="description">{item.description}</span>
                     </Card.Text>
                   </Card.Body>
                 </Card>

@@ -4,9 +4,9 @@ const postCreateCourt = async (data) => {
     return await axios.post("/courts", data);
 };
 
-const getCourtList = async (params, page, limit) => {
+const getCourtList = async (params) => {
     return await axios.get(
-        `/api/v1/courts?${params.name ? `name=${params.name}&` : ""
+        `/courts?${params.name ? `name=${params.name}&` : ""
         }${params.isAvailable !== undefined ? `isAvailable=${params.isAvailable}&` : ""
         }${params.sportTypeld ? `sportTypeld=${params.sportTypeld}&` : ""
         }${params.areaId ? `areald=${params.areaId}&` : ""

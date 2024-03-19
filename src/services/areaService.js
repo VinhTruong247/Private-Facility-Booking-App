@@ -6,7 +6,7 @@ const postCreateArea = async (data) => {
 
 const getAreaList = async (params, page, limit) => {
     return await axios.get(
-        `/api/v1/areas?${params.name ? `name=${params.name}&` : ""
+        `/areas?${params.name ? `name=${params.name}&` : ""
         }
         ${params.current ? `current=${params.current}&` : ""}
         ${params.pageSize ? `pageSize=${params.pageSize}&` : ""}
