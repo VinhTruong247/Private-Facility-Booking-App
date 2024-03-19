@@ -2,14 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isAuthenticated: false,
-  userInfo: {
-    id: 3,
+  user: {
+    id: "",
     username: "",
     email: "",
     role: "",
   },
   accessToken: "",
-  refreshToken: "",
+  resfreshToken: "",
 };
 
 export const authSlice = createSlice({
@@ -18,29 +18,29 @@ export const authSlice = createSlice({
   reducers: {
     login: (state, { payload }) => {
       state.isAuthenticated = true;
-      state.userInfo = {
+      state.user = {
         ...payload.userCredentials,
       };
       state.accessToken = payload.accessToken;
-      state.refreshToken = payload.refreshToken;
+      state.resfreshToken = payload.resfreshToken;
     },
     logout: (state) => {
       state.isAuthenticated = false;
-      state.userInfo = initialState.userInfo;
+      state.user = initialState.user;
       state.accessToken = "";
-      state.refreshToken = "";
+      state.resfreshToken = "";
     },
     update: (state, { payload }) => {
       delete payload.password;
-      state.userInfo = {
-        ...state.userInfo,
+      state.user = {
+        ...state.user,
         ...payload,
       };
     },
 
     updateToken: (state, { payload }) => {
       state.accessToken = payload.accessToken;
-      state.refreshToken = payload.refreshToken;
+      state.resfreshToken = payload.refreshToken;
     },
   },
 });

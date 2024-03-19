@@ -5,6 +5,7 @@ import SignUpPage from "../components/auth/SignUpPage";
 import DashboardPage from "../components/Manage/Dashboard/DashboardPage";
 import Manage from "../components/Manage/Manage";
 import BookingPage from "../components/booking/BookingPage";
+import SearchCourseResult from "../components/search/searchCourseResult";
 
 const AppRoutes = [
   {
@@ -18,6 +19,10 @@ const AppRoutes = [
       {
         path: "facility",
         element: <BookingPage />,
+      },
+      {
+        path: "search-court",
+        element: <SearchCourseResult />,
       },
     ],
   },

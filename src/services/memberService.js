@@ -6,7 +6,7 @@ const postCreateMember = async (data) => {
 
 const getAllMembers = async (params, page, limit) => {
     return await axios.get(
-        `/api/v1/members?${params.isLeader ? `isLeader=${params.isLeader}&` : ""
+        `/members?${params.isLeader ? `isLeader=${params.isLeader}&` : ""
         }
         ${params.eventid ? `eventid=${params.eventid}&` : ""}
         ${params.clubld ? `clubld=${params.clubld}&` : ""}
@@ -33,6 +33,7 @@ const deleteMember = async (id) => {
 
 export {
     postCreateMember,
+    getAllMembers,
     getMemberInfo,
     putUpdateMember,
     deleteMember,

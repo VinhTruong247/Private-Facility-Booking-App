@@ -6,7 +6,7 @@ const postCreatePost = async (data) => {
 
 const getCourtList = async (params) => {
     return await axios.get(
-        `/api/v1/courts?${params.name ? `name=${params.name}&` : ""
+        `/courts?${params.name ? `name=${params.name}&` : ""
         }
         ${params.isAvailable !== undefined ? `isAvailable=${params.isAvailable}&` : ""}
         ${params.sportTypeld ? `sportTypeld=${params.sportTypeld}&` : ""}

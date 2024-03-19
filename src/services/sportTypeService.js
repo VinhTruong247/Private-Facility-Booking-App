@@ -6,7 +6,7 @@ const postSportType = async (data) => {
 
 const getSportList = async (params) => {
     return await axios.get(
-        `/api/v1/sport-types?${params.name ? `name=${params.name}&` : ""
+        `/sport-types?${params.name ? `name=${params.name}&` : ""
         }
         ${params.current ? `current=${params.current}&` : ""}
         ${params.pageSize ? `pageSize=${params.pageSize}&` : ""}

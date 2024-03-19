@@ -6,7 +6,7 @@ const postCreateClub = async (data) => {
 
 const getClubList = async (params, page, limit) => {
     return await axios.get(
-        `/api/v1/clubs?${params.name ? `name=${params.name}&` : ""
+        `/clubs?${params.name ? `name=${params.name}&` : ""
         }
         ${params.email ? `email=${params.email}&` : ""}
         ${params.isActive !== undefined ? `isActive=${params.isActive}&` : ""}
