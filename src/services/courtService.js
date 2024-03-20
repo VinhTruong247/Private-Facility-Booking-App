@@ -21,8 +21,8 @@ const getCourtInfo = async (id) => {
     return await axios.get(`/courts/${id}`);
 };
 
-const putUpdateCourt = async (id) => {
-    return await axios.put(`/courts/${id}`);
+const putUpdateCourt = async (id, data) => {
+    return await axios.put(`/courts/${id}`, data);
 };
 
 const deleteCourt = async (id) => {

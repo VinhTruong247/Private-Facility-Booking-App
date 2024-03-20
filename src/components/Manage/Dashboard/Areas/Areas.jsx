@@ -22,14 +22,17 @@ const Areas = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewArea((prevState) => ({
-      ...prevState,
-      [name]: value
-    }));
-    setEditedArea((prevState) => ({
-      ...prevState,
-      [name]: value
-    }))
+    if (editMode) {
+      setEditedArea((prevState) => ({
+        ...prevState,
+        [name]: value
+      }));
+    } else {
+      setNewArea((prevState) => ({
+        ...prevState,
+        [name]: value
+      }));
+    }
   };
 
   const handleConfirm = async () => {

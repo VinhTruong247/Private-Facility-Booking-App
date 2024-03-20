@@ -1,8 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "../../assets/css/login.module.scss";
 import logoImage from "../../assets/images/logo.svg";
 import { Link } from "react-router-dom";
+import { registerAPI } from "../../services/authService";
+
 export default function SignUpPage() {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: ""
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await registerAPI(formData);
+      console.log("Registration successful:", response.data);
+    } catch (error) {
+      console.error("Registration failed:", error);
+
+    }
+  };
+
   return (
     <div className={styles.login}>
       <div className={styles.left}>
@@ -21,7 +45,18 @@ export default function SignUpPage() {
             <img src={logoImage} alt="Logo" style={{ height: "2rem" }} />
           </div>
           <div className={styles.title}>Sign up</div>
-          <div className={styles.form}>
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <div className="username">
+              <label htmlFor="loginInput">Username:</label>
+              <input
+                type="text"
+                name="username"
+                placeholder="Username address"
+                className={styles.input}
+                value={formData.username}
+                onChange={handleChange}
+              />
+            </div>
             <div className="email">
               <label htmlFor="loginInput">Email:</label>
               <input
@@ -29,24 +64,28 @@ export default function SignUpPage() {
                 name="email"
                 placeholder="Email address"
                 className={styles.input}
+                value={formData.email}
+                onChange={handleChange}
               />
             </div>
             <div className="password">
               <label htmlFor="loginInput">Password:</label>
               <input
-                type="text"
+                type="password"
                 name="password"
                 placeholder="Password"
                 className={styles.input}
+                value={formData.password}
+                onChange={handleChange}
               />
             </div>
-          </div>
-          <div className={styles.signinconfirm}>
-            <button type="submit">Next</button>
-          </div>
+            <div className={styles.signinconfirm}>
+              <button type="submit">Next</button>
+            </div>
+          </form>
           <div className={styles.createAccount}>
-           Have an account ?
-            <Link to={"/LogIn"} className={styles.SignIn}>
+            Already have an account?
+            <Link to={"/login"} className={styles.signIn}>
               Login.
             </Link>
           </div>

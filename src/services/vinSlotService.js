@@ -14,8 +14,8 @@ const getSlotInfo = async (id) => {
     return await axios.get(`/vin-slots/${id}`);
 };
 
-const putUpdateSlot = async (id) => {
-    return await axios.put(`/vin-slots/${id}`);
+const putUpdateSlot = async (id, data) => {
+    return await axios.put(`/vin-slots/${id}`, data);
 };
 
 export {

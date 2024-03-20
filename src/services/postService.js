@@ -22,8 +22,8 @@ const getPostInfo = async (id) => {
     return await axios.get(`/posts/${id}`);
 };
 
-const putUpdatePost = async (id) => {
-    return await axios.put(`/posts/${id}`);
+const putUpdatePost = async (id, data) => {
+    return await axios.put(`/posts/${id}`, data);
 };
 
 const deletePost = async (id) => {
