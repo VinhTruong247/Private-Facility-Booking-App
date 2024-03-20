@@ -16,7 +16,8 @@
     background-color: #f9f9f9; // Background color for the right section
     display: flex; // Makes the container a flex container
     justify-content: center; // Centers items horizontally
-    align-items: center; // Centers items vertically
+    align-items: center; 
+    flex-direction: column;// Centers items vertically
   }
   
   .brand {
@@ -131,4 +132,64 @@
     }
     border:1px solid #999999a1;
 
+  }.password {
+    margin-top: 1rem;
+    width: 100%;
   }
+  
+  .extra {
+    margin-top: 1rem;
+  }
+  
+  .btnLogin {
+    margin-top: 1rem;
+  }
+  
+  .error {
+    color: red;
+  }
+  
+  .confirm {
+    width: 100%;
+    padding: 1rem 0;
+    border-bottom: 1px solid #999999a1;
+  }
+  
+  .signIn {
+    text-decoration: none;
+    font-size: 15px;
+    color: #1880bd;
+    font-weight: 600;
+    padding: 0 0.2rem;
+  }
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #999999a1;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+  }
+  .createAccount {
+    gap: 0.5rem;
+    width: 100%;
+    padding: 1rem 0;
+  }
+  
+  .issueBox {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #999999a1;
+  }
+  
+  .issueBox p {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+  }
+  
