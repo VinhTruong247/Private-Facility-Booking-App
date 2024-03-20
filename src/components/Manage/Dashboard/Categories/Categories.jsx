@@ -1,47 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { postSportType, getSportList, putUpdateSportType, deleteSportType } from '../../../../services/sportTypeService';
+import { toast } from "react-toastify";
 import styles from "./Categories.module.scss";
 
-const categoriesData = [
-  {
-    id: 1,
-    name: "Football",
-    description:
-      "A team sport played by a team of 11 players against another team of 11 players on a field"
-  },
-  {
-    id: 2,
-    name: "Basketball",
-    description:
-      "A game played between two teams of five players each on a rectangular court, usually indoors"
-  },
-  {
-    id: 3,
-    name: "Badminton",
-    description:
-      "Court or lawn game played with lightweight rackets and a shuttlecock"
-  },
-  {
-    id: 4,
-    name: "Tennis",
-    description:
-      "A game in which two opposing players (singles) or pairs of players (doubles) use tautly strung rackets to hit a ball of a specified size and weight"
-  },
-  {
-    id: 5,
-    name: "Volleyball",
-    description:
-      "A game played by two teams, usually of six players on a side, in which the players use their hands to bat a ball back and forth over a high net, trying to make the ball touch the court within the opponents playing area before it can be returned"
-  }
-];
-
 function Categories() {
+  const [sportType, setSportType] = useState([]);
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editedCategory, setEditedCategory] = useState(null);
   const [newCategory, setNewCategory] = useState({
-    name: "",
-    description: ""
+    capacity: 0,
+    beginAt: "",
+    endAt: "",
+    courtId: 0,
+    memberId: 0
   });
 
   const toggleExpand = (categoryId) => {
@@ -56,21 +29,32 @@ function Categories() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewCategory({ ...newCategory, [name]: value });  
+    setNewCategory({ ...newCategory, [name]: value });
     setEditedCategory({ ...editedCategory, [name]: value });
   };
 
-  const handleConfirm = () => {
-    if (editMode) {
-      // Handle edit action here
-      console.log("Edited category:", editedCategory);
-    } else {
-      // Add new category logic here
-      // For now, just log the new category data
-      console.log("New category:", newCategory);
+  const handleConfirm = async () => {
+    try {
+      if (editMode) {
+        await putUpdateSportType(editedCategory.id, editedCategory);
+        setSportType(prevSportType => prevSportType.map(sport => sport.id === editedCategory.id ? editedCategory : sport));
+        toast.success("Sport Type updated successfully.");
+      } else {
+        await postSportType(newCategory);
+        toast.success("New Sport Type added successfully.");
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error("Failed to add new Sport Type.");
     }
     // Reset form fields and close popup
-    setNewCategory({ name: "", description: "" });
+    setNewCategory({
+      capacity: 0,
+      beginAt: "",
+      endAt: "",
+      courtId: 0,
+      memberId: 0
+    });
     togglePopup();
   };
 
@@ -80,9 +64,34 @@ function Categories() {
     setShowPopup(true);
   };
 
-  const handleDelete = (categoryId) => {
-    // Handle delete action here
-    console.log("Deleted category with ID:", categoryId);
+  useEffect(() => {
+    const fetchSportType = async () => {
+      try {
+        const res = await getSportList({}, 1, 10);
+        if (res.data && res.data.items) {
+          setSportType(res.data.items);
+        }
+      } catch (error) {
+        console.error('Error fetching areas:', error);
+      }
+    };
+
+    fetchSportType();
+  }, []);
+
+  const handleDelete = async (categoryId) => {
+    try {
+      const res = await deleteSportType(categoryId);
+      if (res.succeeded) {
+        toast.success("Delete successfully");
+        const updatedSport = sportType.filter(sport => sport.id !== categoryId);
+        setSportType(updatedSport);
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error) {
+      toast.error("Failed to delete area.");
+    }
   };
 
   return (
@@ -92,30 +101,30 @@ function Categories() {
       </div>
 
       <div className={styles["category-list"]}>
-        {categoriesData.map((category) => (
-          <div key={category.id} className={styles["category"]}>
+        {sportType.map((sport) => (
+          <div key={sport.id} className={styles["category"]}>
             <div
               className={styles["category-header"]}
-              onClick={() => toggleExpand(category.id)}
+              onClick={() => toggleExpand(sport.id)}
             >
-              <div className={styles["category-name"]}>{category.name}</div>
+              <div className={styles["category-name"]}>{sport.name}</div>
               <div className={styles["category-toggle"]}>
-                {expandedCategory === category.id ? "-" : "+"}
+                {expandedCategory === sport.id ? "-" : "+"}
               </div>
             </div>
-            {expandedCategory === category.id && (
+            {expandedCategory === sport.id && (
               <div className={styles["category-description"]}>
-                {category.description}
+                {sport.description}
                 <div className={styles["button-container"]}>
                   <button
                     className={styles["edit-button"]}
-                    onClick={() => handleEdit(category)}
+                    onClick={() => handleEdit(sport)}
                   >
                     Edit
                   </button>
                   <button
                     className={styles["delete-button"]}
-                    onClick={() => handleDelete(category.id)}
+                    onClick={() => handleDelete(sport.id)}
                   >
                     Delete
                   </button>
