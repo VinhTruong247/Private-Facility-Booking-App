@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
+import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { logoutAPI } from "../../services/authService";
+import { logout } from "../../redux/slices/authSlice";
+import { toast } from "react-toastify";
 import TopNavbar from "./TopNavbar/TopNavbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,23 +25,30 @@ import "./SideBar.scss";
 import "./Manage.scss"
 
 export default function Manage() {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showSignoutPopup, setShowSignoutPopup] = useState(false);
-  const [signoutConfirmed, setSignoutConfirmed] = useState(false);
 
   const handleSignoutClick = () => {
     setShowSignoutPopup(true);
   };
 
-  const handleConfirmSignout = () => {
-    // Perform sign out action here
-    setSignoutConfirmed(true);
-    // Redirect to login page
-    window.location.href = "/login";
-  };
-
   const handleCancelSignout = () => {
     setShowSignoutPopup(false);
   };
+
+  const handleLogout = async () => {
+    let res = await logoutAPI();
+    if (res.succeeded === false) {
+      toast.error(res.message);
+    } else {
+      dispatch(logout());
+      navigate("/login");
+      setShowSignoutPopup(false);
+    }
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <TopNavbar />
@@ -45,7 +57,7 @@ export default function Manage() {
           <div className="signout-popup" onClick={(e) => e.stopPropagation()}>
             <p>Are you sure you want to sign out?</p>
             <div className="button-container">
-              <button className="confirm-button" onClick={handleConfirmSignout}>
+              <button className="confirm-button" onClick={handleLogout}>
                 Yes
               </button>
               <button className="cancel-button" onClick={handleCancelSignout}>

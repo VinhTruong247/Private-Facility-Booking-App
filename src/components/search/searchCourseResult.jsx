@@ -19,7 +19,7 @@ import { getCourtList } from "../../services/courtService";
 import { toast } from "react-toastify";
 
 const SearchCourseResult = () => {
-  const LIMIT = 5;
+  const LIMIT = 10;
 
   const [courtList, setCourtList] = useState([]);
   const [page, setPage] = useState(1);
@@ -36,14 +36,14 @@ const SearchCourseResult = () => {
 
   const handleChangePage = (e, value) => {
     setLoading(true);
-    if (!sortOption) fetchAllCourts(value, sportTypeId, areaId, searchValue);
+    fetchAllCourts(value, sportTypeId, areaId, searchValue);
   };
 
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!searchValue) return;
     setLoading(true);
-    if (!sortOption) fetchAllCourts(1, sportTypeId, areaId, searchValue);
+    fetchAllCourts(1, sportTypeId, areaId, searchValue);
   };
 
   const handleRefeshList = async () => {
@@ -56,48 +56,58 @@ const SearchCourseResult = () => {
   };
 
   const fetchAllCourts = async (
-    current,
-    sportTypeId,
-    areaId,
-    searchValue,
-    sortValue,
-    sortDescend
+    current = 1,
+    sportTypeId = "",
+    areaId = "",
+    searchValue = "",
+    sortValue = "",
+    sortDescend = false
   ) => {
-    let res = null;
-    if (current) {
-      res = await getCourtList(
-        { sportTypeId, areaId, searchValue, sortValue, sortDescend },
+    try {
+      const res = await getCourtList({
+        name: searchValue,
+        sportTypeId: sportTypeId,
+        areaId: areaId,
+        sortBy: sortValue,
+        sortDescending: sortDescend,
         current,
-        LIMIT
-      );
-    } else
-      res = await getCourtList(
-        { sportTypeId, areaId, searchValue, sortValue, sortDescend },
-        1,
-        LIMIT
-      );
+        pageSize: LIMIT
+      });
 
-    if (res.succeeded) {
-      if (current) setPage(current);
-      setTotalResult(res.data.totalItems);
-      setCount(res.data.totalPages);
-      setCourtList(res.data.items);
+      if (res && res.data && res.data.items) {
+        setPage(current);
+        setTotalResult(res.data.totalItems);
+        setCount(res.data.totalPages);
+        setCourtList(res.data.items);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Error fetching court list:", error);
+      toast.error("An error occurred while fetching court list");
       setLoading(false);
-    } else toast.error("Can't fetch the result you search, try something else");
+    }
   };
 
   useEffect(() => {
-    if (location.state?.searchValue) {
-      fetchAllCourts(1, null, location.state.searchValue);
-      setSearchValue(location.state.searchValue);
-    } else if (location.state?.sportType) {
-      fetchAllCourts(1, null, location.state.sportType);
-      setSportTypeId(location.state.searchValue);
-    } else if (location.state?.area) {
-      fetchAllCourts(1, location.state.area);
-      setAreaId(location.state.area);
-    } else fetchAllCourts();
-  }, []);
+    if (location.state) {
+      const { searchValue, sportTypeId, areaId } = location.state;
+
+      if (searchValue) {
+        setSearchValue(searchValue);
+        fetchAllCourts(1, null, null, searchValue);
+      } else if (sportTypeId) {
+        setSportTypeId(sportTypeId);
+        fetchAllCourts(1, sportTypeId);
+      } else if (areaId) {
+        setAreaId(areaId);
+        fetchAllCourts(1, null, areaId);
+      } else {
+        fetchAllCourts();
+      }
+    } else {
+      fetchAllCourts();
+    }
+  }, [location.state]);
 
   return (
     <div className="searchList-container">
@@ -153,7 +163,7 @@ const SearchCourseResult = () => {
                 fetchAllCourts={fetchAllCourts}
                 setLoading={setLoading}
                 setAreaId={setAreaId}
-                sportTypeId={sportTypeId}
+                setSportTypeId={setSportTypeId}
                 searchValue={searchValue}
                 setSortOption={setSortOption}
                 sortOption={sortOption}
@@ -163,9 +173,8 @@ const SearchCourseResult = () => {
               <Typography variant="h2" className="count">
                 {totalResult === 0
                   ? "Oops, nothing found"
-                  : `Found ${totalResult} ${
-                      totalResult === 1 ? "court" : "courts"
-                    }`}
+                  : `Found ${totalResult} ${totalResult === 1 ? "court" : "courts"
+                  }`}
               </Typography>
 
               <CourtList

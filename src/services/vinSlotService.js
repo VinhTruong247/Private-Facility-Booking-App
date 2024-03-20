@@ -9,7 +9,7 @@ const getVinSlotList = async (params, page, limit) => {
         `/vin-slots?${params.status ? `status=${params.status}&` : ""
         }
     ${params.createdBy ? `createdBy=${params.createdBy}&` : ""}
-        ${params.courtid ? `courtid=${params.courtid}&` : ""}
+        ${params.courtId ? `courtId=${params.courtId}&` : ""}
         ${params.current ? `current=${params.current}&` : ""}
         ${params.pageSize ? `pageSize=${params.pageSize}&` : ""}
         ${params.sortBy ? `sortBy=${params.sortBy}&` : ""}

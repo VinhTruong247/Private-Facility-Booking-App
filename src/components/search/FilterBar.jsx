@@ -1,48 +1,70 @@
+import React, { useEffect, useState } from 'react';
+import { getAreaList } from '../../services/areaService';
+import { getSportList } from '../../services/sportTypeService';
 import {
   InputLabel,
   MenuItem,
   Select,
   FormControl,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
 } from "@mui/material";
-import { Accordion } from "react-bootstrap";
 
 const FilterBar = (props) => {
   const {
-    categoryList,
-    fetchAllCourses,
+    fetchAllCourts,
     setLoading,
-    setSelectedCategory,
-    selectedCategory,
+    setAreaId,
+    setSportTypeId,
     searchValue,
-    setSortOption,
-    sortOption,
   } = props;
 
-  const handleChangeCategory = (value) => {
+  const [areas, setAreas] = useState([]);
+  const [sportTypes, setSportTypes] = useState([]);
+  const [selectedAreaId, setSelectedAreaId] = useState('');
+  const [selectedSportTypeId, setSelectedSportTypeId] = useState('');
+
+  useEffect(() => {
+    const fetchAreas = async () => {
+      try {
+        const res = await getAreaList({}, 1, 10);
+        if (res.data && res.data.items) {
+          setAreas(res.data.items);
+        }
+      } catch (error) {
+        console.error('Error fetching areas:', error);
+      }
+    };
+
+    fetchAreas();
+
+    const fetchSportTypes = async () => {
+      try {
+        const res = await getSportList({}, 1, 10);
+        if (res.data && res.data.items) {
+          setSportTypes(res.data.items);
+        }
+      } catch (error) {
+        console.error('Error fetching areas:', error);
+      }
+    };
+
+    fetchSportTypes();
+
+  }, []);
+
+  const handleChangeArea = (value) => {
     setLoading(true);
-    setSelectedCategory(value);
-    if (!sortOption) fetchAllCourses(1, value, searchValue);
-    if (sortOption === "createdAt")
-      fetchAllCourses(1, value, searchValue, sortOption);
-    if (sortOption === "high")
-      fetchAllCourses(1, value, searchValue, "price", true);
-    if (sortOption === "low")
-      fetchAllCourses(1, value, searchValue, "price", false);
+    setSelectedAreaId(value);
+    setAreaId(value);
+    fetchAllCourts(1,selectedSportTypeId, value, searchValue);
   };
 
-  const handleSort = (value) => {
+  const handleChangeSportType = (value) => {
     setLoading(true);
-    setSortOption(value);
-    if (value === "createdAt")
-      fetchAllCourses(1, selectedCategory, searchValue, value);
-    if (value === "high")
-      fetchAllCourses(1, selectedCategory, searchValue, "price", true);
-    if (value === "low")
-      fetchAllCourses(1, selectedCategory, searchValue, "price", false);
+    setSelectedSportTypeId(value);
+    setSportTypeId(value);
+    fetchAllCourts(1, value, selectedAreaId, searchValue);
   };
+
 
   return (
     <>
@@ -50,56 +72,43 @@ const FilterBar = (props) => {
         <div style={{ fontWeight: 500, fontSize: "1.3em" }}>Filters</div>
 
         <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-          <InputLabel id="demo-simple-select-standard-label">Sort</InputLabel>
+          <InputLabel id="area-select-label">Area</InputLabel>
           <Select
-            labelId="demo-simple-select-standard-label"
-            id="demo-simple-select-standard"
-            label="Age"
-            value={sortOption}
-            onChange={(e) => handleSort(e.target.value)}
+            labelId="area-select-label"
+            id="area-select"
+            value={selectedAreaId}
+            onChange={(e) => handleChangeArea(e.target.value)}
+            label="Area"
           >
-            {/* <MenuItem value="Most reviewed">Most reviewed</MenuItem>
-            <MenuItem value="Highest Rated">Highest Rated</MenuItem> */}
-            <MenuItem value="createdAt">Newest</MenuItem>
-            <MenuItem value="low">Lowest Price</MenuItem>
-            <MenuItem value="high">Hightest Price</MenuItem>
+            {areas.map((area) => (
+              <MenuItem key={area.id} value={area.id}>
+                {area.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <hr />
+
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+          <InputLabel id="sport-type-select-label">Sport Types</InputLabel>
+          <Select
+            labelId="sport-type-select-label"
+            id="sport-type-select"
+            value={selectedSportTypeId}
+            onChange={(e) => handleChangeSportType(e.target.value)}
+            label="Sport Types"
+          >
+            {sportTypes.map((sport) => (
+              <MenuItem key={sport.id} value={sport.id}>
+                {sport.name}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </div>
 
       <hr />
-
-      <Accordion
-        className="filterBar"
-        defaultActiveKey={["0"]}
-        flush
-        alwaysOpen
-      >
-        <Accordion.Item eventKey="0">
-          <Accordion.Header>Category</Accordion.Header>
-          <Accordion.Body>
-            <FormControl>
-              <RadioGroup
-                name="controlled-radio-buttons-group"
-                value={selectedCategory}
-                onChange={(e) => handleChangeCategory(e.target.value)}
-              >
-                {categoryList &&
-                  categoryList.length > 0 &&
-                  categoryList.map((item) => {
-                    return (
-                      <FormControlLabel
-                        key={item.id}
-                        control={<Radio value={item.id} />}
-                        label={item.name}
-                      />
-                    );
-                  })}
-              </RadioGroup>
-            </FormControl>
-          </Accordion.Body>
-        </Accordion.Item>
-      </Accordion>
     </>
   );
 };
