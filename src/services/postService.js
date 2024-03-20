@@ -12,7 +12,6 @@ const getCourtList = async (params) => {
         ${params.sportTypeId ? `sportTypeId=${params.sportTypeId}&` : ""}
         ${params.areaId ? `areald=${params.areaId}&` : ""}
         ${params.current ? `current=${params.current}&` : ""}
-        ${params.pageSize ? `pageSize=${params.pageSize}&` : ""}
         ${params.sortBy ? `sortBy=${params.sortBy}&` : ""}
         ${params.sortDescending ? `sortDescending=${params.sortDescending}&` : ""
         }`
