@@ -1,7 +1,5 @@
-// CourtDetailsPage.jsx
-
 import React, { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom"; // Import Link
+import { useParams, useNavigate } from "react-router-dom"; // Import Link
 import { Container, Typography, Card, IconButton } from "@mui/material";
 import { getCourtInfo } from "../../services/courtService";
 import { ArrowBack } from "@mui/icons-material"; // Import ArrowBack icon

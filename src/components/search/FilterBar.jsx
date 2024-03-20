@@ -7,7 +7,6 @@ import {
   Select,
   FormControl,
   Button,
-  Box,
 } from "@mui/material";
 
 const FilterBar = (props) => {

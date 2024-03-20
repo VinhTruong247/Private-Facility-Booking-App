@@ -5,7 +5,7 @@ import Card from "react-bootstrap/Card";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 const CourtList = (props) => {
-  const { courtList, loading, totalResult, handleRefeshList } = props;
+  const { courtList, loading, handleRefeshList } = props;
 
   return (
     <div className="course-list ps-md-5 mt-4 mt-md-0">
