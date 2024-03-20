@@ -1,0 +1,46 @@
+/* MenuToggle.scss */
+
+.menu-toggle {
+    position: relative;
+    cursor: pointer;
+  
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      display: none;
+      flex-direction: column;
+      padding: 10px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      z-index: 1;
+    }
+  
+    .dropdown.open {
+      display: flex;
+    }
+  
+    .home-button {
+      display: flex;
+      align-items: center;
+      background-color: #007bff;
+      color: #fff;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  
+      svg {
+        margin-right: 5px;
+      }
+  
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  }
+  
