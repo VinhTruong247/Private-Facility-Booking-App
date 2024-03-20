@@ -6,16 +6,18 @@ import { faCheckSquare, faSquare } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 
 const Roles = () => {
+  const [roles, setRole] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [expandedRole, setExpandedRole] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [editedRole, setEditedRole] = useState({}); // Initialize with an empty object
   const [newRole, setNewRole] = useState({
-    role: "",
+    name: "",
     description: "",
-    isActive: true,
     permissions: []
   });
+
+  console.log(roles)
 
   const togglePopup = () => {
     setShowPopup(!showPopup);
@@ -31,30 +33,26 @@ const Roles = () => {
     }
   };
 
-  const handleConfirm = () => {
-    if (editMode) {
-      // Handle edit action here
-      console.log("Edited Role:", editedRole);
-    } else {
-      // Handle add action here
-      console.log("New Role:", newRole);
+  const handleConfirm = async () => {
+    try {
+      if (editMode) {
+      } else {
+        await postCreateRole(newRole);
+        toast.success("New role added successfully.");
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error("Failed to add new role.");
     }
     setNewRole({
-      role: "",
+      name: "",
       description: "",
-      isActive: true,
       permissions: []
     });
     togglePopup();
   };
 
   const handleCancel = () => {
-    setNewRole({
-      role: "",
-      description: "",
-      isActive: true,
-      permissions: []
-    });
     togglePopup();
   };
 
@@ -64,70 +62,35 @@ const Roles = () => {
     setShowPopup(true);
   };
 
-  const handleDelete = (roleId) => {
-    console.log("Deleted Role with ID:", roleId);
+  const handleDelete = async (roleId) => {
+    try {
+      const res = await deleteRole(roleId);
+      if (res.succeeded) {
+        toast.success("Delete successfully");
+        const updatedRole = roles.filter(role => role.id !== roleId);
+        setRole(updatedRole);
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error) {
+      toast.error("Failed to delete club.");
+    }
   };
 
-  const roleData = [
-    {
-      id: 9,
-      name: "User_update1",
-      description: "",
-      isActive: true,
-      permissions: [
-        {
-          id: 3,
-          name: "USER_CREATE",
-          description: "Something",
-          apiPath: "api/v1/users",
-          method: "put"
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const res = await getRoleList();
+        if (res.data && res.data.permissions) {
+          setRole(res.data.permissions);
         }
-      ]
-    },
-    {
-      id: 10,
-      name: "Something",
-      description: "This is the role of...",
-      isActive: true,
-      permissions: [
-        {
-          id: 4,
-          name: "USER_UPDATE",
-          description: "Permission to update a User",
-          apiPath: "api/v1/users",
-          method: "POST"
-        },
-        {
-          id: 3,
-          name: "USER_CREATE",
-          description: "Something",
-          apiPath: "api/v1/users",
-          method: "put"
-        }
-      ]
-    },
-    {
-      id: 2,
-      name: "USER",
-      description: "Normal user",
-      isActive: true,
-      permissions: []
-    },
-    {
-      id: 4,
-      name: "ADMIN",
-      description: "System admin",
-      isActive: true,
-      permissions: []
-    },
-    {
-      id: 3,
-      name: "VIN_MEMBER",
-      description: "Vinhome residence",
-      isActive: true,
-      permissions: []
-    }
-  ];
+      } catch (error) {
+        console.error('Error fetching areas:', error);
+      }
+    };
+
+    fetchRoles();
+  }, []);
 
   return (
     <div className={styles["roles-container"]}>
@@ -135,7 +98,7 @@ const Roles = () => {
         <h2>Roles</h2>
       </div>
       <div className={styles["role-columns"]}>
-        {roleData.map((role) => (
+        {roles.map((role) => (
           <div
             key={role.id}
             className={styles["role"]}
