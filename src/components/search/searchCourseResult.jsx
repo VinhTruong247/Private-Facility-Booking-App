@@ -102,9 +102,11 @@ const SearchCourseResult = () => {
         setAreaId(areaId);
         fetchAllCourts(1, null, areaId);
       } else {
+        // If no search value is provided, fetch all courts
         fetchAllCourts();
       }
     } else {
+      // If no location state is provided, fetch all courts
       fetchAllCourts();
     }
   }, [location.state]);
@@ -157,7 +159,8 @@ const SearchCourseResult = () => {
 
       <div className="body">
         <Container>
-          <Grid container spacing={2}>
+          <Grid container spacing={
+2}>
             <Grid item xs={12} md={3}>
               <FilterBar
                 fetchAllCourts={fetchAllCourts}
