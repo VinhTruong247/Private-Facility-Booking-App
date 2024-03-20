@@ -6,6 +6,7 @@ import DashboardPage from "../components/Manage/Dashboard/DashboardPage";
 import Manage from "../components/Manage/Manage";
 import BookingPage from "../components/booking/BookingPage";
 import SearchCourseResult from "../components/search/searchCourseResult";
+import ProtectedRoute from "./ProtectedRoute";
 import CourtDetailsPage from "../components/search/CourtDetailPage"; // Import the CourtDetailsPage component
 
 const AppRoutes = [
@@ -41,7 +42,11 @@ const AppRoutes = [
   },
   {
     path: "manage",
-    element: <Manage />,
+    element: (
+      <ProtectedRoute name={"adminDashboard"}>
+        <Manage />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "",

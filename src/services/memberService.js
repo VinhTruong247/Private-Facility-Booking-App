@@ -4,7 +4,7 @@ const postCreateMember = async (data) => {
     return await axios.post("/members", data);
 };
 
-const getAllMembers = async (params, page, limit) => {
+const getAllMembers = async (params) => {
     return await axios.get(
         `/members?${params.isLeader ? `isLeader=${params.isLeader}&` : ""
         }
