@@ -5,11 +5,13 @@ import {
   Link,
   OutlinedInput,
   Pagination,
+  Grid,
+  Container,
+  Typography
 } from "@mui/material";
 import "./SearchCourseResult.scss";
 import { useNavigate, useLocation } from "react-router";
 import SearchIcon from "@mui/icons-material/Search";
-import { Col, Container, Row } from "react-bootstrap";
 import FilterBar from "./FilterBar";
 import CourtList from "./courtList";
 import { useEffect, useState } from "react";
@@ -47,7 +49,7 @@ const SearchCourseResult = () => {
   const handleRefeshList = async () => {
     setSearchValue("");
     setSportTypeId("");
-    setAreaId("")
+    setAreaId("");
     setSortOption("");
     setLoading(true);
     fetchAllCourts();
@@ -81,14 +83,13 @@ const SearchCourseResult = () => {
       setCount(res.data.totalPages);
       setCourtList(res.data.items);
       setLoading(false);
-    } 
-    else toast.error("Can't fetch the result you search, try something else");
+    } else toast.error("Can't fetch the result you search, try something else");
   };
 
   useEffect(() => {
     if (location.state?.searchValue) {
       fetchAllCourts(1, null, location.state.searchValue);
-      setSearchValue(location.state.searchValue); 
+      setSearchValue(location.state.searchValue);
     } else if (location.state?.sportType) {
       fetchAllCourts(1, null, location.state.sportType);
       setSportTypeId(location.state.searchValue);
@@ -100,41 +101,34 @@ const SearchCourseResult = () => {
 
   return (
     <div className="searchList-container">
-      <div className="header mt-2 py-5">
+      <div className="header">
         <Container>
-          <Col className="mb-4" xs={5}>
-            <Breadcrumbs aria-label="breadcrumb">
-              <Link
-                underline="hover"
-                color="inherit"
-                sx={{ cursor: "pointer" }}
-                onClick={() => navigate("/")}
-              >
-                Home
-              </Link>
-              <Link
-                underline="hover"
-                sx={{ cursor: "pointer" }}
-                color="text.primary"
-              >
-                Search Result
-              </Link>
-            </Breadcrumbs>
-          </Col>
-
-          <Row>
-            <Col className="title" xs={6} sm={4}>
-              Search Result
-            </Col>
-
-            <Col xs={1} sm={4}></Col>
-
-            <Col className="search-box" xs={5} sm={4}>
+          <Grid container alignItems="center" justifyContent="space-between">
+            <Grid item xs={12} sm={6}>
+              <Breadcrumbs aria-label="breadcrumb">
+                <Link
+                  underline="hover"
+                  color="inherit"
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => navigate("/")}
+                >
+                  Home
+                </Link>
+                <Link
+                  underline="hover"
+                  sx={{ cursor: "pointer" }}
+                  color="text.primary"
+                >
+                  Search Result
+                </Link>
+              </Breadcrumbs>
+            </Grid>
+            <Grid item xs={12} sm={6}>
               <form onSubmit={handleSearch}>
                 <OutlinedInput
-                  size="small"
+                  fullWidth
                   type="text"
-                  placeholder="input search text."
+                  placeholder="Search"
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   endAdornment={
@@ -146,15 +140,15 @@ const SearchCourseResult = () => {
                   }
                 />
               </form>
-            </Col>
-          </Row>
+            </Grid>
+          </Grid>
         </Container>
       </div>
 
-      <div className="body py-3">
+      <div className="body">
         <Container>
-          <Row>
-            <Col md={5} lg={4}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={3}>
               <FilterBar
                 fetchAllCourts={fetchAllCourts}
                 setLoading={setLoading}
@@ -164,8 +158,16 @@ const SearchCourseResult = () => {
                 setSortOption={setSortOption}
                 sortOption={sortOption}
               />
-            </Col>
-            <Col md={7} lg={8}>
+            </Grid>
+            <Grid item xs={12} md={9}>
+              <Typography variant="h2" className="count">
+                {totalResult === 0
+                  ? "Oops, nothing found"
+                  : `Found ${totalResult} ${
+                      totalResult === 1 ? "court" : "courts"
+                    }`}
+              </Typography>
+
               <CourtList
                 fetchAllCourts={fetchAllCourts}
                 courtList={courtList}
@@ -173,7 +175,6 @@ const SearchCourseResult = () => {
                 loading={loading}
                 handleRefeshList={handleRefeshList}
               />
-
               <Pagination
                 className="course-paginate"
                 count={count}
@@ -181,8 +182,8 @@ const SearchCourseResult = () => {
                 color="primary"
                 onChange={handleChangePage}
               />
-            </Col>
-          </Row>
+            </Grid>
+          </Grid>
         </Container>
       </div>
     </div>

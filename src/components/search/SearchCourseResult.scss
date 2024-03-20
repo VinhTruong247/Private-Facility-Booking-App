@@ -1,100 +1,240 @@
+// SearchCourseResult.scss
+
+$primaryColor: #FF6000;
+$secondaryColor: #a13f02;
 $bgColor: #f7f7f7;
 
 .searchList-container {
-    .header {
-        background-color: white;
+  .header {
+    background-color: white;
+    padding: 1.5rem 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
 
-        .title {
-            font-weight: 500;
-            font-size  : 1.3em;
-        }
+    .MuiOutlinedInput-root {
+      width: 100%;
+      max-width: 500px;
+      border-radius: 20px;
+      background-color: #fff;
 
+      .MuiOutlinedInput-input {
+        padding: 1rem;
+        font-size: 1rem;
+      }
+
+      .MuiIconButton-root {
+        padding: 0.5rem;
+      }
+    }
+  }
+
+  .body {
+    .MuiContainer-root {
+      padding: 0;
     }
 
-    .body {
-        .filterBar {
+    .MuiGrid-root {
+      .filterBar {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
 
-            .accordion-item {
-                background-color: $bgColor;
+        .MuiAccordion-root {
+          background-color: transparent;
 
-                .accordion-button {
-                    background-color: $bgColor;
-                    font-weight     : 500;
-                    font-size       : 0.6em;
+          .MuiAccordionSummary-root {
+            padding: 0;
+          }
 
-                }
-
-            }
+          .MuiAccordionDetails-root {
+            padding: 0;
+          }
         }
 
-        .course-list {
-            .count {
-                font-weight: 500;
-                font-size  : 1.2em;
-            }
-
-            .course-item {
-                display       : flex;
-                flex-direction: row;
-                border-radius : 0;
-
-                .card-img-top {
-                    height    : 13rem;
-                    width     : 40%;
-                    object-fit: cover;
-                }
-
-                .category {
-                    color    : gray;
-                    font-size: 0.9em;
-                    display  : block;
-                }
-
-                .area {
-                    display  : block;
-                    font-size: 0.9em;
-
-                    span {
-                        color: gray;
-                    }
-                }
-
-                .description {
-                    display  : block;
-                    color    : #FF6000;
-                    font-size: 1.4em;
-                }
-
-                .add-btn {
-                    background-color: #FF6000;
-                    border-color    : aliceblue;
-                    color           : aliceblue;
-                    font-weight     : 600;
-
-                    &:hover {
-                        background-color: #a13f02;
-                    }
-                }
-
-                @media screen and (max-width: 992px) {
-                    flex-direction: column;
-                    height        : auto;
-
-                    .card-img-top {
-                        width: 100%;
-                    }
-                }
-            }
-
+        .selected {
+          font-weight: bold;
         }
+      }
 
-        .course-paginate {
-            margin-top: 3rem;
+      .count {
+        font-weight: 600;
+        font-size: 1.2rem;
+        color: $primaryColor;
+        margin-bottom: 1.5rem;
+      }
 
-            .MuiPagination-ul {
+      .course-list {
+        .course-item {
+          background-color: #fff;
+          border-radius: 20px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          overflow: hidden;
+          transition: all 0.3s ease;
+          margin-bottom: 1.5rem;
+          padding: 1.5rem;
 
-                justify-content: center;
+          &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+          }
+
+          .MuiCardMedia-root {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 20px 20px 0 0;
+          }
+
+          .details {
+            .category {
+              color: gray;
+              font-size: 0.9rem;
+              margin-bottom: 0.5rem;
             }
+
+            .area {
+              font-size: 0.9rem;
+              color: $primaryColor;
+              margin-bottom: 1rem;
+
+              span {
+                color: gray;
+              }
+            }
+
+            .description {
+              color: $primaryColor;
+              font-size: 1rem;
+              margin-bottom: 1rem;
+            }
+
+            .add-btn {
+              background-color: $primaryColor;
+              border: none;
+              color: #fff;
+              font-weight: 600;
+              padding: 0.5rem 1rem;
+              margin-top: 1rem;
+              cursor: pointer;
+              transition: background-color 0.3s ease;
+              border-radius: 20px;
+
+              &:hover {
+                background-color: $secondaryColor;
+              }
+            }
+          }
         }
+      }
+
+      .course-paginate {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+
+        .MuiPagination-ul {
+          justify-content: center;
+        }
+      }
     }
+  }
+}
+
+
+// FilterBar component styles
+.filterBar {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+
+  .MuiAccordion-root {
+    background-color: transparent;
+
+    .MuiAccordionSummary-root {
+      padding: 0;
+    }
+
+    .MuiAccordionDetails-root {
+      padding: 0;
+    }
+  }
+
+  .selected {
+    font-weight: bold;
+  }
+}
+
+// CourtList component styles
+.course-list {
+  .count {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: $primaryColor;
+    margin-bottom: 2rem;
+  }
+
+  .course-item {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin-bottom: 2rem;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .MuiCardMedia-root {
+      height: 200px;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .details {
+      padding: 1.5rem;
+
+      .category {
+        color: gray;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .area {
+        font-size: 1rem;
+        color: $primaryColor;
+        margin-bottom: 1.5rem;
+
+        span {
+          color: gray;
+        }
+      }
+
+      .description {
+        color: $primaryColor;
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .add-btn {
+        background-color: $primaryColor;
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        margin-top: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: $secondaryColor;
+        }
+      }
+    }
+  }
 }
