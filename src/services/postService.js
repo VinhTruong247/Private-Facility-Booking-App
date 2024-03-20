@@ -9,8 +9,8 @@ const getCourtList = async (params) => {
         `/courts?${params.name ? `name=${params.name}&` : ""
         }
         ${params.isAvailable !== undefined ? `isAvailable=${params.isAvailable}&` : ""}
-        ${params.sportTypeld ? `sportTypeld=${params.sportTypeld}&` : ""}
-        ${params.areald ? `areald=${params.areald}&` : ""}
+        ${params.sportTypeId ? `sportTypeId=${params.sportTypeId}&` : ""}
+        ${params.areaId ? `areald=${params.areaId}&` : ""}
         ${params.current ? `current=${params.current}&` : ""}
         ${params.pageSize ? `pageSize=${params.pageSize}&` : ""}
         ${params.sortBy ? `sortBy=${params.sortBy}&` : ""}

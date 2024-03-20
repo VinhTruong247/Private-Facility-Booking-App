@@ -33,8 +33,6 @@ export default function NavigationBar(props) {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const role = useSelector((state) => state.auth.user.role);
 
-  console.log(useSelector((state) => state.auth))
-
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };

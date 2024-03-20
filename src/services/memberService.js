@@ -8,9 +8,9 @@ const getAllMembers = async (params, page, limit) => {
     return await axios.get(
         `/members?${params.isLeader ? `isLeader=${params.isLeader}&` : ""
         }
-        ${params.eventid ? `eventid=${params.eventid}&` : ""}
-        ${params.clubld ? `clubld=${params.clubld}&` : ""}
-        ${params.userld ? `userld=${params.userld}&` : ""}
+        ${params.eventId ? `eventId=${params.eventId}&` : ""}
+        ${params.clubId ? `clubId=${params.clubId}&` : ""}
+        ${params.userId ? `userId=${params.userId}&` : ""}
         ${params.current ? `current=${params.current}&` : ""}
         ${params.pageSize ? `pageSize=${params.pageSize}&` : ""}
         ${params.sortBy ? `sortBy=${params.sortBy}&` : ""}
