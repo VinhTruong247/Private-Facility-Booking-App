@@ -18,8 +18,8 @@ const getAreaInfo = async (id) => {
     return await axios.get(`/areas/${id}`);
 };
 
-const putUpdateArea = async (id) => {
-    return await axios.put(`/areas/${id}`);
+const putUpdateArea = async (id, data) => {
+    return await axios.put(`/areas/${id}`, data);
 };
 
 const deleteArea = async (id) => {

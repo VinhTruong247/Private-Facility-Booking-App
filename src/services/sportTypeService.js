@@ -20,8 +20,8 @@ const getSportTypeInfo = async (id) => {
     return await axios.get(`/sport-types/${id}`);
 };
 
-const putUpdateSportType = async (id) => {
-    return await axios.put(`/sport-types/${id}`);
+const putUpdateSportType = async (id, data) => {
+    return await axios.put(`/sport-types/${id}`, data);
 };
 
 const deleteSportType = async (id) => {

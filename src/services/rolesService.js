@@ -8,7 +8,6 @@ const getRoleList = async () => {
     return await axios.get(`/roles`);
 };
 
-
 const getRoleInfo = async (id) => {
     return await axios.get(`/roles/${id}`);
 };

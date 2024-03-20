@@ -36,19 +36,6 @@ export default function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const handleLogin = async (data) => {
-  //   setLoading(true);
-  //   const res = await postLogin(data);
-  //   if (res.succeeded) {
-  //     if (res.data.userCredentials.status) {
-  //       dispatch(login(res.data));
-  //       navigate("/");
-  //       toast.success(res.message);
-  //     } else toast.error("Account currently inactive.");
-  //   } else toast.error("Login Failed.");
-  //   setLoading(false);
-  // };
-
   const handleLogin = async (data) => {
     setLoading(true);
     const res = await postLogin(data);
