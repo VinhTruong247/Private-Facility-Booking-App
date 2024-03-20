@@ -1,7 +1,7 @@
 import axios from "../utils/axiosCustomize"
 
 const postCreateUser = async (data) => {
-    return await axios.post("/areas", data);
+    return await axios.post("/users", data);
 };
 
 const getAllUsers = async (params) => {

@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { postCreateClub, getClubList, putUpdateClub, deleteClub } from '../../../../services/clubService';
+import { toast } from "react-toastify";
 import "./Club.scss";
 
 const Club = () => {
+  const [clubs, setClub] = useState([]);
   const [expandedClub, setExpandedClub] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -10,18 +13,36 @@ const Club = () => {
     name: "",
     email: "",
     description: "",
-    isActive: true,
-    isCommon: false,
-    sportType: ""
+    sportTypeId: 0
   });
 
   const togglePopup = () => {
     setShowPopup(!showPopup);
-    setEditMode(false); // Reset edit mode when closing the popup
+    setEditMode(false);
+    setEditedClub(null); // Reset edit mode when closing the popup
   };
 
-  const handleConfirm = () => {
-    // Handle form submission or other actions here
+  const handleConfirm = async () => {
+    try {
+      if (editMode) {
+        await putUpdateClub(editedClub.id, editedClub);
+        setClub(prevClub => prevClub.map(club => club.id === editedClub.id ? editedClub : club));
+        toast.success("Club updated successfully.");
+      } else {
+        await postCreateClub(newClub);
+        toast.success("New club added successfully.");
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error("Failed to add new club.");
+    }
+    // Reset the form and close the popup
+    setNewClub({
+      name: "",
+      email: "",
+      description: "",
+      sportTypeId: 0
+    });
     togglePopup();
   };
 
@@ -37,6 +58,7 @@ const Club = () => {
     setEditMode(true);
     setShowPopup(true);
   };
+  
   const toggleClubExpansion = (club) => {
     if (expandedClub === club.id) {
       setExpandedClub(null);
@@ -44,116 +66,41 @@ const Club = () => {
       setExpandedClub(club.id);
     }
   };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditedClub({ ...editedClub, [name]: value });
   };
-  const handleDelete = (clubId) => {
-    // Perform delete action here
-    console.log("Deleted Club with ID:", clubId);
-  };
-  const clubData = [
-    {
-      id: 1,
-      name: "Common",
-      email: "common@gmail.com",
-      description: "Common club for all users",
-      isActive: true,
-      isCommon: true
-    },
-    {
-      id: 2,
-      name: "Thunder Strikers FC",
-      email: "thunderstrikersfc@gmail.com",
-      description:
-        "A dynamic football club dedicated to promoting teamwork and excellence on the field.",
-      isActive: true,
-      isCommon: false,
-      sportType: "Football"
-    },
-    {
-      id: 3,
-      name: "Blaze United",
-      email: "blazeunited@gmail.com",
-      description:
-        "Passionate about football, Blaze United emphasizes skill development and fair play.",
-      isActive: true,
-      isCommon: false,
-      sportType: "Football"
-    },
-    {
-      id: 4,
-      name: "Phoenix Kickers",
-      email: "phoenixkickers@gmail.com",
-      description:
-        "Phoenix Kickers is a football club committed to fostering camaraderie and sportsmanship among its members.",
-      isActive: true,
-      isCommon: false,
-      sportType: "Football"
-    },
-    {
-      id: 5,
-      name: "Sky Hoopers",
-      email: "skyhoopers@gmail.com",
-      description:
-        "Sky Hoopers is a basketball club that thrives on high-flying dunks, fast breaks, and strategic gameplay.",
-      isActive: true,
-      isCommon: false,
-      sportType: "Basketball"
-    },
-    {
-      id: 6,
-      name: "Elite Ballers",
-      email: "eliteballers@gmail.com",
-      description:
-        "Elite Ballers is dedicated to refining basketball skills and promoting a strong sense of unity among its players.",
-      isActive: true,
-      isCommon: false,
-      sportType: "Basketball"
-    },
-    {
-      id: 7,
-      name: "Lunar Dunkers",
-      email: "lunardunkers@gmail.com",
-      description:
-        "Lunar Dunkers is a passionate basketball club that aims to reach new heights in both skill and sportsmanship.",
-      isActive: true,
-      isCommon: false,
-      sportType: "Basketball"
-    },
-    {
-      id: 8,
-      name: "Swift Shuttlers",
-      email: "swiftshuttlers@gmail.com",
-      description:
-        "Swift Shuttlers is a badminton club focused on agility, precision, and a friendly competitive spirit.",
-      isActive: true,
-      isCommon: false,
-      sportType: "Badminton"
-    },
-    {
-      id: 9,
-      name: "Zen Smashers",
-      email: "zensmashers@gmail.com",
-      description:
-        "Precision Racqueteers is committed to honing badminton skills with a focus on accuracy and strategy.",
-      isActive: true,
-      isCommon: false,
-      sportType: "Badminton"
-    },
-    {
-      id: 10,
-      name: "Precision Racqueteers",
-      email: "precisionracqueteers@gmail.com",
-      description:
-        "Lunar Dunkers is a passionate basketball club that aims to reach new heights in both skill and sportsmanship.",
-      isActive: true,
-      isCommon: false,
-      sportType: "Badminton"
+
+  const handleDelete = async (clubId) => {
+    try {
+      const res = await deleteClub(clubId);
+      if (res.succeeded) {
+        toast.success("Delete successfully");
+        const updatedClub = clubs.filter(club => club.id !== clubId);
+        setClub(updatedClub);
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error) {
+      toast.error("Failed to delete club.");
     }
-  ];
+  };
 
+  useEffect(() => {
+    const fetchClubs = async () => {
+      try {
+        const res = await getClubList({ pageSize: 20 });
+        if (res.data && res.data.items) {
+          setClub(res.data.items);
+        }
+      } catch (error) {
+        console.error('Error fetching areas:', error);
+      }
+    };
 
+    fetchClubs();
+  }, []);
 
   return (
     <div className="club-container">
@@ -161,7 +108,7 @@ const Club = () => {
         <h2>Clubs</h2>
       </div>
       <div className="club-list">
-        {clubData.map((club) => (
+        {clubs.map((club) => (
           <div
             key={club.id}
             className="club"
