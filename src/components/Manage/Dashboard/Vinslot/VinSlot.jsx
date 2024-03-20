@@ -40,14 +40,14 @@ const VinSlot = () => {
       if (editMode) {
         await putUpdateSlot(editedVinSlot.id, editedVinSlot);
         setVinSlots(prevVinSlots => prevVinSlots.map(vinSlot => vinSlot.id === editedVinSlot.id ? editedVinSlot : vinSlot));
-        toast.success("Vin slot updated successfully.");
+        toast.success("Vin-slot updated successfully.");
       } else {
         await postCreateSlot(newVinSlot);
-        toast.success("New vin slot added successfully.");
+        toast.success("New slot added successfully.");
       }
     } catch (error) {
       console.error('Error:', error);
-      toast.error("Failed to add new vin slot.");
+      toast.error("Failed to add new slot.");
     }
     // Reset form fields and close popup
     setNewVinSlot({
