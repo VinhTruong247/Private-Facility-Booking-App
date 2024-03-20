@@ -105,142 +105,90 @@ export default function LoginPage() {
       </div>
 
       <div className={styles.right}>
-        <div className={styles.loginbox}>
+        <div className={styles.top}>
           <div className={styles.logo}>
             <img src={logoImage} alt="Logo" style={{ height: "2rem" }} />
           </div>
-          <div className={styles.title}>Log In
-            {/* <div className={styles.loginemail}>
-            <input
-              type="text"
-              name="email"
-              placeholder="Email address"
-              className={styles.input}
-            />
-          </div> */}
-
-            <div className="auth-form-container text-start">
-              <form
-                className="auth-form"
-                onSubmit={handleSubmit(handleLogin)}
-              >
-                <div className="email mb-3">
-                  <TextField
-                    fullWidth
-                    type="email"
-                    label="Email"
-                    name="email"
-                    placeholder="Email"
-                    {...register("email", {
-                      required: "Email is required",
+          <div className={styles.title}>Log In</div>
+        </div>
+        
+        <div className={styles.loginbox}>
+          <form onSubmit={handleSubmit(handleLogin)}>
+            <div className={styles.form}>
+              <div className={styles.email}>
+                <TextField
+                  fullWidth
+                  type="email"
+                  label="Email"
+                  name="email"
+                  placeholder="Email"
+                  {...register("email", { required: "Email is required" })}
+                />
+                {errors.email && (
+                  <div className={styles.error}>{errors.email.message}</div>
+                )}
+              </div>
+              <div className={styles.password}>
+                <FormControl variant="outlined" fullWidth>
+                  <InputLabel htmlFor="Password">Password</InputLabel>
+                  <OutlinedInput
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    label="Password"
+                    placeholder="Password"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton onClick={togglePassword} edge="end">
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    {...register("password", {
+                      required: "Password is required",
                     })}
                   />
-                  {errors.email && (
-                    <div
-                      style={{
-                        color: "red",
-                      }}
-                    >
-                      {errors.email.message}
+                  {errors.password && (
+                    <div className={styles.error}>
+                      {errors.password.message}
                     </div>
                   )}
-                </div>
-
-                <div className="password mb-3 d-flex flex-column">
-                  <FormControl variant="outlined">
-                    <InputLabel htmlFor="Password">Password</InputLabel>
-                    <OutlinedInput
-                      fullWidth
-                      type={showPassword ? "text" : "password"}
-                      name="password"
-                      label="Password"
-                      placeholder="Password"
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={togglePassword}
-                            edge="end"
-                          >
-                            {showPassword ? (
-                              <VisibilityOff />
-                            ) : (
-                              <Visibility />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                      {...register("password", {
-                        required: "Password is required",
-                      })}
-                    />
-                    {errors.password && (
-                      <div
-                        style={{
-                          color: "red",
-                        }}
-                      >
-                        {errors.password.message}
-                      </div>
-                    )}
-                  </FormControl>
-
-                  <div className="extra mt-3 row justify-content-between">
-                    <div className="d-flex col-12">
-                      <div className="text-end">
-                        <Link
-                          style={{
-                            textDecoration: "none",
-                          }}
-                          to="/forgot-password"
-                        >
-                          Forgot password ?
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="btn-login">
-                  <LoadingButton
-                    loadingPosition="start"
-                    startIcon={<></>}
-                    className="btn btn-login w-100 theme-btn mx-auto "
-                    type="submit"
-                    loading={loading}
-                  >
-                    Login
-                  </LoadingButton>
-                </div>
-              </form>
-              <hr />
-              <div className="auth-option text-center pt-2">
-                {/* <GoogleLogin
-                onSuccess={(credentialResponse) =>
-                  handleLoginGoogle(credentialResponse)
-                }
-                width={260}
-              /> */}
+                </FormControl>
+              </div>
+              <div className={styles.extra}>
+                <Link to="/forgot-password">Forgot password?</Link>
+              </div>
+              <div className={styles.btnLogin}>
+                <LoadingButton
+                  loadingPosition="start"
+                  startIcon={<></>}
+                  className="btn btn-login w-100 theme-btn mx-auto "
+                  type="submit"
+                  loading={loading}
+                >
+                  Login
+                </LoadingButton>
               </div>
             </div>
-          </div>
+          </form>
+          <hr />
           <div className={styles.confirm}>
-            <Link to={"/register"} className={styles.SignIn}>
+            <Link to="/register" className={styles.signIn}>
               Trouble Logging In?
             </Link>
           </div>
           <div className={styles.createAccount}>
-            Don't have an account ?
-            <Link to={"/register"} className={styles.SignIn}>
+            Don't have an account ?{" "}
+            <Link to="/register" className={styles.signIn}>
               Create Account.
             </Link>
           </div>
-          <div className={styles.IssueBox}>
+          <div className={styles.issueBox}>
             <p>Having issues logging in?</p>
-            <div style={{ width: "100%" }}>
-              We've enhanced our login system. Please click
-              <Link to={"/register"} className={styles.SignIn}>
+            <div>
+              We've enhanced our login system. Please click{" "}
+              <Link to="/register" className={styles.signIn}>
                 here
-              </Link>
+              </Link>{" "}
               and follow the steps to login with advanced security.
             </div>
           </div>
