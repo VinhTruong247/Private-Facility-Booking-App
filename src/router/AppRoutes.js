@@ -6,6 +6,7 @@ import DashboardPage from "../components/Manage/Dashboard/DashboardPage";
 import Manage from "../components/Manage/Manage";
 import BookingPage from "../components/booking/BookingPage";
 import SearchCourseResult from "../components/search/searchCourseResult";
+import CourtDetailsPage from "../components/search/CourtDetailPage"; // Import the CourtDetailsPage component
 
 const AppRoutes = [
   {
@@ -23,6 +24,10 @@ const AppRoutes = [
       {
         path: "search-court",
         element: <SearchCourseResult />,
+      },
+      {
+        path: "court/:id", // Define the path for court details with a dynamic parameter ':id'
+        element: <CourtDetailsPage />, // Render the CourtDetailsPage component
       },
     ],
   },

@@ -1,7 +1,7 @@
 // SearchCourseResult.scss
 
-$primaryColor: #FF6000;
-$secondaryColor: #a13f02;
+$primaryColor: #006eff;
+$secondaryColor: #00c3ff;
 $bgColor: #f7f7f7;
 
 .searchList-container {
@@ -130,7 +130,7 @@ $bgColor: #f7f7f7;
       }
 
       .course-paginate {
-        margin-top: 2rem;
+        margin: 2rem;
         display: flex;
         justify-content: center;
 
@@ -145,28 +145,45 @@ $bgColor: #f7f7f7;
 
 // FilterBar component styles
 .filterBar {
-  background-color: #fff;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
-
-  .MuiAccordion-root {
-    background-color: transparent;
-
-    .MuiAccordionSummary-root {
-      padding: 0;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+  
+    .filter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
     }
-
-    .MuiAccordionDetails-root {
-      padding: 0;
+  
+    .filter-title {
+      font-weight: 500;
+      font-size: 1.3em;
+    }
+  
+    .filter-options {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin-top: 1rem;
+  
+      .filter-control {
+        width: 200px; // Adjust the width as needed
+      }
+  
+      .select-field {
+        width: 100%;
+      }
+  
+      .clear-button {
+        border-radius: 10px;
+      }
     }
   }
-
-  .selected {
-    font-weight: bold;
-  }
-}
+  
 
 // CourtList component styles
 .course-list {
@@ -238,3 +255,61 @@ $bgColor: #f7f7f7;
     }
   }
 }
+// CourtDetailsPage.scss
+
+// CourtDetailsPage.scss
+
+.container {
+    margin-top: 4rem;
+    padding: 2rem;
+  
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+  
+    .back-button {
+      font-size: 2rem; /* Adjust button size */
+      margin-right: 1rem; /* Add margin between button and title */
+    }
+  
+    .title {
+        color: #1976d2;
+        margin: 0;
+        flex-grow: 1; /* Allow title to grow and occupy remaining space */
+        text-align: center; /* Center align the title */
+        font-weight: 700;
+      }
+  
+    .card {
+      max-width: 800px;
+      margin: auto;
+      padding: 3rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border: 1px solid #ccc;
+    }
+  
+    .description {
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
+  
+    .sport-type,
+    .area,
+    .availability {
+      margin-bottom: 1rem;
+    }
+  
+    .availability span {
+      color: #4caf50;
+    }
+  
+    .loading {
+      margin-top: 2rem;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+  }
+  
