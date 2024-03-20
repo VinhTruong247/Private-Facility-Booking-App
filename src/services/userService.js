@@ -2,7 +2,7 @@ import axios from "../utils/axiosCustomize"
 
 const getAllUsers = async (params, page, limit) => {
     return await axios.get(
-        `/api/v1/users?${params.username ? `username=${params.username}&` : ""
+        `/users?${params.username ? `username=${params.username}&` : ""
         }
         ${params.email ? `email=${params.email}&` : ""}
         ${params.phone ? `phone=${params.phone}&` : ""}

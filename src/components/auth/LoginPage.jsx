@@ -37,16 +37,31 @@ export default function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // const handleLogin = async (data) => {
+  //   setLoading(true);
+  //   const res = await postLogin(data);
+  //   if (res.succeeded) {
+  //     if (res.data.userCredentials.status) {
+  //       dispatch(login(res.data));
+  //       navigate("/");
+  //       toast.success(res.message);
+  //     } else toast.error("Account currently inactive.");
+  //   } else toast.error("Login Failed.");
+  //   setLoading(false);
+  // };
+
   const handleLogin = async (data) => {
     setLoading(true);
     const res = await postLogin(data);
-    if (res.succeeded) {
-      if (res.data.userCredentials.status) {
-        dispatch(login(res.data));
-        navigate("/");
-        toast.success(res.message);
-      } else toast.error("Account currently inactive.");
-    } else toast.error("Login Failed.");
+    if (res.statusCode === 201) {
+      dispatch(login(res.data));
+      navigate("/");
+      toast.success(res.message);
+    } else if (res.statusCode === 401) {
+      toast.error("Account currently inactive.");
+    } else {
+      toast.error("Login Failed.");
+    }
     setLoading(false);
   };
 
@@ -107,8 +122,6 @@ export default function LoginPage() {
             <div className="auth-form-container text-start">
               <form
                 className="auth-form"
-                // method="POST"
-                // autoComplete={"off"}
                 onSubmit={handleSubmit(handleLogin)}
               >
                 <div className="email mb-3">

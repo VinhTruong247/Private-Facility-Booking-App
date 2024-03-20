@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
 import AppBar from '@mui/material/AppBar';
+import ProfileButton from "./ProfileButton"
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
@@ -14,6 +16,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import SearchBar from "./searchBar";
+import { toast } from "react-toastify";
+import { logoutAPI } from '../services/authService';
+import { logout } from "../redux/slices/authSlice";
 
 const drawerWidth = 240;
 const navItems = ['Listing Facilities', 'Renting Facilities', 'Resources', 'Support'];
@@ -21,11 +27,24 @@ const navItems = ['Listing Facilities', 'Renting Facilities', 'Resources', 'Supp
 export default function NavigationBar(props) {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const role = useSelector((state) => state.auth.user.role);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
+  };
+
+  const handleLogout = async () => {
+    let res = await logoutAPI();
+    if (res.succeeded === false) {
+      toast.error(res.message);
+    } else {
+      dispatch(logout());
+      navigate("/login");
+    }
   };
 
   const drawer = (
@@ -80,36 +99,49 @@ export default function NavigationBar(props) {
             >
               <MenuIcon />
             </IconButton>
+
             <Typography
               variant="h6"
               component="div"
               sx={{ flexGrow: 1, display: { xs: 'none', lg: 'block' } }}
+              onClick={() => navigate("/")}
             >
               SportScape Connect
             </Typography>
-            <Box sx={{ display: { xs: 'none', lg: 'block' }, mr: 3 }}>
-              {navItems.map((item) => ( 
+
+            <SearchBar
+              style1={{ display: { xs: "none", sm: "block" }, mr: 3 }}
+              style2={{}}
+            />
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', lg: 'block' }, mr: 3 }}>
+              {navItems.map((item) => (
                 <Button key={item} sx={{ color: '#fff', mr: 3 }}>
                   {item}
                 </Button>
               ))}
             </Box>
-            <Box sx={{ display: { xs: "none", lg: "flex" } }}>
-              <Button
-                className="nav-btn"
-                variant="outlined"
-                onClick={() => navigate("/login")}
-              >
-                Login
-              </Button>
-              <Button
-                className="nav-btn"
-                variant="outlined"
-                onClick={() => navigate("/register")}
-              >
-                Register
-              </Button>
-            </Box>
+            {isAuthenticated ? (
+              <>
+                <ProfileButton handleLogout={handleLogout} role={role} />
+              </>
+            ) : (
+              <Box sx={{ display: { xs: "none", lg: "flex" } }}>
+                <Button
+                  className="nav-btn"
+                  variant="outlined"
+                  onClick={() => navigate("/login")}
+                >
+                  Login
+                </Button>
+                <Button
+                  className="nav-btn"
+                  variant="outlined"
+                  onClick={() => navigate("/register")}
+                >
+                  Register
+                </Button>
+              </Box>
+            )}
           </Toolbar>
         </AppBar>
 

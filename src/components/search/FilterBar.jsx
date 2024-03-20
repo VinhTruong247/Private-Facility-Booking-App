@@ -99,42 +99,6 @@ const FilterBar = (props) => {
             </FormControl>
           </Accordion.Body>
         </Accordion.Item>
-
-        <Accordion.Item eventKey="1">
-          <Accordion.Header>Level</Accordion.Header>
-          <Accordion.Body>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco
-          </Accordion.Body>
-        </Accordion.Item>
-
-        <Accordion.Item eventKey="2">
-          <Accordion.Header>Language</Accordion.Header>
-          <Accordion.Body>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco
-          </Accordion.Body>
-        </Accordion.Item>
-
-        <Accordion.Item eventKey="3">
-          <Accordion.Header>Rating</Accordion.Header>
-          <Accordion.Body>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco
-          </Accordion.Body>
-        </Accordion.Item>
-
-        <Accordion.Item eventKey="4">
-          <Accordion.Header>Price</Accordion.Header>
-          <Accordion.Body>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco
-          </Accordion.Body>
-        </Accordion.Item>
       </Accordion>
     </>
   );

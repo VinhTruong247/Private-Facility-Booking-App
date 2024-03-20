@@ -6,7 +6,7 @@ const postCreateSlot = async (data) => {
 
 const getVinSlotList = async (params, page, limit) => {
     return await axios.get(
-        `/api/v1/vin-slots?${params.status ? `status=${params.status}&` : ""
+        `/vin-slots?${params.status ? `status=${params.status}&` : ""
         }
     ${params.createdBy ? `createdBy=${params.createdBy}&` : ""}
         ${params.courtid ? `courtid=${params.courtid}&` : ""}

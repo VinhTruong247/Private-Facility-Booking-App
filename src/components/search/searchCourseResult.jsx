@@ -11,21 +11,20 @@ import { useNavigate, useLocation } from "react-router";
 import SearchIcon from "@mui/icons-material/Search";
 import { Col, Container, Row } from "react-bootstrap";
 import FilterBar from "./FilterBar";
-import CourtList from "./courseList";
+import CourtList from "./courtList";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import { getCourtList } from "../../services/courtService";
-import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const SearchCourseResult = () => {
   const LIMIT = 5;
-  const categoryList = useSelector((state) => state.category.categoryList);
 
   const [courtList, setCourtList] = useState([]);
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
   const [totalResult, setTotalResult] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [sportTypeId, setSportTypeId] = useState("");
   const [areaId, setAreaId] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [sortOption, setSortOption] = useState("");
@@ -35,65 +34,67 @@ const SearchCourseResult = () => {
 
   const handleChangePage = (e, value) => {
     setLoading(true);
-    if (!sortOption) fetchAllCourts(value, areaId, searchValue);
-    if (sortOption === "createdAt")
-      fetchAllCourts(value, areaId, searchValue, sortOption);
-    if (sortOption === "high")
-      fetchAllCourts(value, areaId, searchValue, "price", true);
-    if (sortOption === "low")
-      fetchAllCourts(value, areaId, searchValue, "price", false);
+    if (!sortOption) fetchAllCourts(value, sportTypeId, areaId, searchValue);
   };
 
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!searchValue) return;
     setLoading(true);
-    if (!sortOption) fetchAllCourts(1, areaId, searchValue);
-    if (sortOption === "createdAt")
-      fetchAllCourts(1, areaId, searchValue, sortOption);
-    if (sortOption === "high")
-      fetchAllCourts(1, areaId, searchValue, "price", true);
-    if (sortOption === "low")
-      fetchAllCourts(1, areaId, searchValue, "price", false);
+    if (!sortOption) fetchAllCourts(1, sportTypeId, areaId, searchValue);
   };
 
   const handleRefeshList = async () => {
     setSearchValue("");
-    areaId("");
+    setSportTypeId("");
+    setAreaId("")
     setSortOption("");
     setLoading(true);
     fetchAllCourts();
   };
 
   const fetchAllCourts = async (
-    currentPage,
+    current,
+    sportTypeId,
     areaId,
     searchValue,
     sortValue,
     sortDescend
   ) => {
     let res = null;
-    if (currentPage) {
+    if (current) {
       res = await getCourtList(
-        { areaId, searchValue, sortValue, sortDescend },
-        currentPage,
+        { sportTypeId, areaId, searchValue, sortValue, sortDescend },
+        current,
         LIMIT
       );
     } else
       res = await getCourtList(
-        { areaId, searchValue, sortValue, sortDescend },
+        { sportTypeId, areaId, searchValue, sortValue, sortDescend },
         1,
         LIMIT
       );
+
+    if (res.succeeded) {
+      if (current) setPage(current);
+      setTotalResult(res.data.totalItems);
+      setCount(res.data.totalPages);
+      setCourtList(res.data.items);
+      setLoading(false);
+    } 
+    else toast.error("Can't fetch the result you search, try something else");
   };
 
   useEffect(() => {
-    if (location.state?.areald) {
-      fetchAllCourts(1, location.state.areaId);
-      setAreaId(location.state.areaId);
-    } else if (location.state?.searchValue) {
+    if (location.state?.searchValue) {
       fetchAllCourts(1, null, location.state.searchValue);
-      setSearchValue(location.state.searchValue);
+      setSearchValue(location.state.searchValue); 
+    } else if (location.state?.sportType) {
+      fetchAllCourts(1, null, location.state.sportType);
+      setSportTypeId(location.state.searchValue);
+    } else if (location.state?.area) {
+      fetchAllCourts(1, location.state.area);
+      setAreaId(location.state.area);
     } else fetchAllCourts();
   }, []);
 
@@ -155,11 +156,10 @@ const SearchCourseResult = () => {
           <Row>
             <Col md={5} lg={4}>
               <FilterBar
-                categoryList={categoryList}
                 fetchAllCourts={fetchAllCourts}
                 setLoading={setLoading}
                 setAreaId={setAreaId}
-                areaId={areaId}
+                sportTypeId={sportTypeId}
                 searchValue={searchValue}
                 setSortOption={setSortOption}
                 sortOption={sortOption}
