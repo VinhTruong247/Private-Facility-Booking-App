@@ -4,7 +4,7 @@ const postCreateRole = async (data) => {
     return await axios.post("/roles", data);
 };
 
-const getRoleList = async (params) => {
+const getRoleList = async () => {
     return await axios.get(`/roles`);
 };
 
