@@ -4,7 +4,7 @@ const postCreateSlot = async (data) => {
     return await axios.post("/vin-slots", data);
 };
 
-const getVinSlotList = async (params, page, limit) => {
+const getVinSlotList = async (params) => {
     return await axios.get(
         `/vin-slots?${params.status ? `status=${params.status}&` : ""
         }

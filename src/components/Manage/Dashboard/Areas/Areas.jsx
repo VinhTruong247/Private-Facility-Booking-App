@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { postCreateArea, putUpdateArea, getAreaList, deleteArea } from '../../../../services/areaService';
+import { toast } from "react-toastify";
 import styles from "./Areas.module.scss"; // Import styles module
 
 const Areas = () => {
+  const [areas, setAreas] = useState([]);
   const [expandedArea, setExpandedArea] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -29,14 +32,19 @@ const Areas = () => {
     }))
   };
 
-  const handleConfirm = () => {
-    if (editMode) {
-      // Handle edit action here
-      console.log("Edited area:", editedArea);
-    } else {
-      // Add new area logic here
-      // For now, just log the new area data
-      console.log("New area:", newArea);
+  const handleConfirm = async () => {
+    try {
+      if (editMode) {
+        await putUpdateArea(editedArea.id, editedArea);
+        setAreas(prevAreas => prevAreas.map(area => area.id === editedArea.id ? editedArea : area));
+        toast.success("Area updated successfully.");
+      } else {
+        await postCreateArea(newArea);
+        toast.success("New area added successfully.");
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error("Failed to add new area.");
     }
     // Reset form fields and close popup
     setNewArea({
@@ -52,64 +60,40 @@ const Areas = () => {
     setShowPopup(true);
   };
 
-  const handleDelete = (areaId) => {
-    // Handle delete action here
-    console.log("Deleted area with ID:", areaId);
+  const handleDelete = async (areaId) => {
+    try {
+      const res = await deleteArea(areaId);
+      if (res.succeeded) {
+        toast.success("Delete successfully");
+        const updatedAreas = areas.filter(area => area.id !== areaId);
+        setAreas(updatedAreas);
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error) {
+      toast.error("Failed to delete area.");
+    }
   };
 
-  const areaData = [
-    {
-      id: 10,
-      name: "S10",
-      address: "The Origami block, Vinhomes Grand Park"
-    },
-    {
-      id: 1,
-      name: "S01",
-      address: "The Rainbow block, Vinhomes Grand Park"
-    },
-    {
-      id: 2,
-      name: "S02",
-      address: "The Rainbow block, Vinhomes Grand Park"
-    },
-    {
-      id: 3,
-      name: "S03",
-      address: "The Rainbow block, Vinhomes Grand Park"
-    },
-    {
-      id: 5,
-      name: "S05",
-      address: "The Rainbow block, Vinhomes Grand Park"
-    },
-    {
-      id: 7,
-      name: "S07",
-      address: "The Origami block, Vinhomes Grand Park"
-    },
-    {
-      id: 4,
-      name: "S04",
-      address: "The Rainbow block, Vinhomes Grand Park"
-    },
-    {
-      id: 8,
-      name: "S08",
-      address: "The Origami block, Vinhomes Grand Park"
-    },
-    {
-      id: 6,
-      name: "S06",
-      address: "The Origami block, Vinhomes Grand Park"
-    },
-    {
-      id: 9,
-      name: "S09",
-      address: "The Origami block, Vinhomes Grand Park"
-    }
-  ];
+  useEffect(() => {
+    const fetchAreas = async () => {
+      try {
+        const res = await getAreaList({ pageSize: 20 });
+        if (res.data && res.data.items) {
+          const sortedAreas = res.data.items.sort((a, b) => {
+            const numA = parseInt(a.name.substring(1));
+            const numB = parseInt(b.name.substring(1));
+            return numA - numB;
+          });
+          setAreas(sortedAreas);
+        }
+      } catch (error) {
+        console.error('Error fetching areas:', error);
+      }
+    };
 
+    fetchAreas();
+  }, []);
 
   return (
     <div className={styles["areas-container"]}>
@@ -117,7 +101,7 @@ const Areas = () => {
         <h2>Areas</h2>
       </div>
       <div className={styles["area-list"]}>
-        {areaData.map((area) => (
+        {areas.map((area) => (
           <div
             key={area.id}
             className={styles["area"]}
@@ -150,9 +134,9 @@ const Areas = () => {
           </div>
         ))}
       </div>
-      <div className={styles["add-button"]} onClick={togglePopup}>
-        +
-      </div>
+
+      <div className={styles["add-button"]} onClick={togglePopup}>+</div>
+
       {showPopup && (
         <div className={styles["modal"]}>
           <div className={styles["popup-box"]}>

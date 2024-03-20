@@ -27,9 +27,14 @@ const FilterBar = (props) => {
   useEffect(() => {
     const fetchAreas = async () => {
       try {
-        const res = await getAreaList({}, 1, 10);
+        const res = await getAreaList({pageSize: 20});
         if (res.data && res.data.items) {
-          setAreas(res.data.items);
+          const sortedAreas = res.data.items.sort((a, b) => {
+            const numA = parseInt(a.name.substring(1));
+            const numB = parseInt(b.name.substring(1));
+            return numA - numB;
+          });
+          setAreas(sortedAreas);
         }
       } catch (error) {
         console.error('Error fetching areas:', error);
@@ -57,7 +62,7 @@ const FilterBar = (props) => {
     setLoading(true);
     setSelectedAreaId(value);
     setAreaId(value);
-    fetchAllCourts(1,selectedSportTypeId, value, searchValue);
+    fetchAllCourts(1, selectedSportTypeId, value, searchValue);
   };
 
   const handleChangeSportType = (value) => {
