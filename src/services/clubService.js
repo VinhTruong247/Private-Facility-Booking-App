@@ -10,7 +10,7 @@ const getClubList = async (params, page, limit) => {
         }
         ${params.email ? `email=${params.email}&` : ""}
         ${params.isActive !== undefined ? `isActive=${params.isActive}&` : ""}
-        ${params.sportTypeld ? `sportTypeld=${params.sportTypeld}&` : ""}
+        ${params.sportTypeId ? `sportTypeId=${params.sportTypeId}&` : ""}
         ${params.pageSize ? `pageSize=${params.pageSize}&` : ""}
         ${params.sortBy ? `sortBy=${params.sortBy}&` : ""}
         ${params.sortDescending ? `sortDescending=${params.sortDescending}&` : ""

@@ -9,6 +9,13 @@ instance.defaults.withCredentials = true;
 instance.interceptors.request.use(
   function (config) {
     // Do something before request is sent
+    // Get the token from local storage
+    const authData = JSON.parse(localStorage.getItem('persist:root')).auth;
+    const token = JSON.parse(authData).accessToken;
+    // Set the token to the Authorization header if token exists
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   function (error) {
