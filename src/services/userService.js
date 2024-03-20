@@ -10,13 +10,12 @@ const getAllUsers = async (params) => {
     );
 };
 
-
 const getUserInfo = async (id) => {
     return await axios.get(`/users/${id}`);
 };
 
-const putUpdateUser = async (id) => {
-    return await axios.put(`/users/${id}`);
+const putUpdateUser = async (id, data) => {
+    return await axios.put(`/users/${id}`, data);
 };
 
 export {

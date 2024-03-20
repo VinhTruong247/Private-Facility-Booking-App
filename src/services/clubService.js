@@ -15,8 +15,8 @@ const getClubInfo = async (id) => {
     return await axios.get(`/clubs/${id}`);
 };
 
-const putUpdateClub = async (id) => {
-    return await axios.put(`/clubs/${id}`);
+const putUpdateClub = async (id, data) => {
+    return await axios.put(`/clubs/${id}`, data);
 };
 
 const deleteClub = async (id) => {

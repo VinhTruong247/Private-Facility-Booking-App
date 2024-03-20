@@ -23,8 +23,8 @@ const getMemberInfo = async (id) => {
     return await axios.get(`/members/${id}`);
 };
 
-const putUpdateMember = async (id) => {
-    return await axios.put(`/members/${id}`);
+const putUpdateMember = async (id, data) => {
+    return await axios.put(`/members/${id}`, data);
 };
 
 const deleteMember = async (id) => {

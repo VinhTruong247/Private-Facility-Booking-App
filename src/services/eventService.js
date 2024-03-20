@@ -8,8 +8,8 @@ const getEventInfo = async (id) => {
     return await axios.get(`/events/${id}`);
 };
 
-const putUpdateEvent = async (id) => {
-    return await axios.put(`/events/${id}`);
+const putUpdateEvent = async (id, data) => {
+    return await axios.put(`/events/${id}`, data);
 };
 
 export {
