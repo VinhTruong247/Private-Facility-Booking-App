@@ -19,7 +19,7 @@ export const authSlice = createSlice({
     login: (state, { payload }) => {
       state.isAuthenticated = true;
       state.user = {
-        ...payload.userCredentials,
+        ...payload.user,
       };
       state.accessToken = payload.accessToken;
       state.resfreshToken = payload.resfreshToken;

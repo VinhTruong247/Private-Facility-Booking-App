@@ -22,7 +22,7 @@ export default function ProfileButton(props) {
   const navigateDashboard = () => {
     switch (role) {
       case "ADMIN":
-        navigate("/admin");
+        navigate("/manage");
         break;
 
       case "USER":
