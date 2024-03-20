@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { postCreateCourt, getCourtList, putUpdateCourt, deleteCourt } from '../../../../services/courtService';
+import { toast } from "react-toastify";
 import "./Courts.scss";
 
 const Courts = () => {
+  const [courts, setCourt] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [expandedCourt, setExpandedCourt] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -9,9 +12,8 @@ const Courts = () => {
   const [newCourt, setNewCourt] = useState({
     name: "",
     description: "",
-    isAvailable: true,
-    sportType: "",
-    area: ""
+    sportTypeId: 0,
+    areaId: 0
   });
   const togglePopup = () => {
     setShowPopup(!showPopup);
@@ -27,120 +29,51 @@ const Courts = () => {
     }
   };
 
-  const handleConfirm = () => {
-    if (editMode) {
-      // Handle edit action here
-      console.log("Edited Court:", editedCourt);
-    } else {
-      // Handle add action here
-      console.log("New Court:", newCourt);
+  const handleConfirm = async () => {
+    try {
+      if (editMode) {
+        await putUpdateCourt(editedCourt.id, editedCourt);
+        setCourt(prevCourt => prevCourt.map(court => court.id === editedCourt.id ? editedCourt : court));
+        toast.success("Court updated successfully.");
+      } else {
+        await postCreateCourt(newCourt);
+        toast.success("New court added successfully.");
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error("Failed to add new court.");
     }
     // Reset the form and close the popup
     setNewCourt({
       name: "",
       description: "",
-      isAvailable: true,
-      sportType: "",
-      area: ""
-    });
-    togglePopup();
-  };
-  const handleCancel = () => {
-    // Reset the form and close the popup
-    setNewCourt({
-      name: "",
-      description: "",
-      isAvailable: true,
-      sportType: "",
-      area: ""
+      sportTypeId: 0,
+      areaId: 0
     });
     togglePopup();
   };
 
-  const courtsData = [
-    {
-      id: 51,
-      name: "S1C1",
-      description: "S1 Football Court",
-      isAvailable: true,
-      sportType: "Football",
-      area: "S01"
-    },
-    {
-      id: 52,
-      name: "S1C2",
-      description: "S1 Basketball Court",
-      isAvailable: true,
-      sportType: "Basketball",
-      area: "S01"
-    },
-    {
-      id: 53,
-      name: "S1C3",
-      description: "S1 Volleyball Court",
-      isAvailable: true,
-      sportType: "Volleyball",
-      area: "S01"
-    },
-    {
-      id: 54,
-      name: "S1C4",
-      description: "S1 Badminton Court",
-      isAvailable: true,
-      sportType: "Badminton",
-      area: "S01"
-    },
-    {
-      id: 55,
-      name: "S1C5",
-      description: "S1 Tennis Court",
-      isAvailable: true,
-      sportType: "Tennis",
-      area: "S01"
-    },
-    {
-      id: 56,
-      name: "S2C1",
-      description: "S2 Football Court",
-      isAvailable: true,
-      sportType: "Football",
-      area: "S02"
-    },
-    {
-      id: 57,
-      name: "S2C2",
-      description: "S2 Basketball Court",
-      isAvailable: true,
-      sportType: "Basketball",
-      area: "S02"
-    },
-    {
-      id: 58,
-      name: "S2C3",
-      description: "S2 Volleyball Court",
-      isAvailable: true,
-      sportType: "Volleyball",
-      area: "S02"
-    },
-    {
-      id: 59,
-      name: "S2C4",
-      description: "S2 Badminton Court",
-      isAvailable: true,
-      sportType: "Badminton",
-      area: "S02"
-    },
-    {
-      id: 60,
-      name: "S2C5",
-      description: "S2 Tennis Court",
-      isAvailable: true,
-      sportType: "Tennis",
-      area: "S02"
-    }
-  ];
+  const handleCancel = () => {
+    togglePopup();
+  };
+
+  useEffect(() => {
+    const fetchCourts = async () => {
+      try {
+        const res = await getCourtList({ pageSize: 30 });
+        if (res.data && res.data.items) {
+          setCourt(res.data.items);
+        }
+      } catch (error) {
+        console.error('Error fetching areas:', error);
+      }
+    };
+
+    fetchCourts();
+  }, []);
+
   const groupedCourts = {};
-  courtsData.forEach((court) => {
+  courts.forEach((court) => {
     if (!groupedCourts[court.sportType]) {
       groupedCourts[court.sportType] = [];
     }
@@ -152,9 +85,19 @@ const Courts = () => {
     setEditMode(true);
     setShowPopup(true);
   };
-  const handleDelete = (courtId) => {
-    // Handle delete action here
-    console.log("Deleted Court with ID:", courtId);
+  const handleDelete = async (courtId) => {
+    try {
+      const res = await deleteCourt(courtId);
+      if (res.succeeded) {
+        toast.success("Delete successfully");
+        const updatedCourt = courts.filter(court => court.id !== courtId);
+        setCourt(updatedCourt);
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error) {
+      toast.error("Failed to delete area.");
+    }
   };
   return (
     <div className="courts-container">
@@ -229,9 +172,9 @@ const Courts = () => {
                       onChange={(e) =>
                         editMode
                           ? setEditedCourt({
-                              ...editedCourt,
-                              name: e.target.value
-                            })
+                            ...editedCourt,
+                            name: e.target.value
+                          })
                           : setNewCourt({ ...newCourt, name: e.target.value })
                       }
                     />
@@ -249,59 +192,59 @@ const Courts = () => {
                       onChange={(e) =>
                         editMode
                           ? setEditedCourt({
-                              ...editedCourt,
-                              sportType: e.target.value
-                            })
+                            ...editedCourt,
+                            sportType: e.target.value
+                          })
                           : setNewCourt({
-                              ...newCourt,
-                              sportType: e.target.value
-                            })
+                            ...newCourt,
+                            sportType: e.target.value
+                          })
                       }
                     />
                   </div>
                 </div>
                 <div className="column-group"><div className="form-group">
-                <label htmlFor="court-description">Description:</label>
-                <input
-                  type="text"
-                  id="court-description"
-                  name="description"
-                  placeholder="Enter Description"
-                  value={
-                    editMode ? editedCourt.description : newCourt.description
-                  }
-                  onChange={(e) =>
-                    editMode
-                      ? setEditedCourt({
+                  <label htmlFor="court-description">Description:</label>
+                  <input
+                    type="text"
+                    id="court-description"
+                    name="description"
+                    placeholder="Enter Description"
+                    value={
+                      editMode ? editedCourt.description : newCourt.description
+                    }
+                    onChange={(e) =>
+                      editMode
+                        ? setEditedCourt({
                           ...editedCourt,
                           description: e.target.value
                         })
-                      : setNewCourt({
+                        : setNewCourt({
                           ...newCourt,
                           description: e.target.value
                         })
-                  }
-                />
+                    }
+                  />
+                </div>
+
+                  <div className="form-group">
+                    <label htmlFor="court-area">Area:</label>
+                    <input
+                      type="text"
+                      id="court-area"
+                      name="area"
+                      placeholder="Enter Area"
+                      value={editMode ? editedCourt.area : newCourt.area}
+                      onChange={(e) =>
+                        editMode
+                          ? setEditedCourt({ ...editedCourt, area: e.target.value })
+                          : setNewCourt({ ...newCourt, area: e.target.value })
+                      }
+                    />
+                  </div></div>
               </div>
 
-              <div className="form-group">
-                <label htmlFor="court-area">Area:</label>
-                <input
-                  type="text"
-                  id="court-area"
-                  name="area"
-                  placeholder="Enter Area"
-                  value={editMode ? editedCourt.area : newCourt.area}
-                  onChange={(e) =>
-                    editMode
-                      ? setEditedCourt({ ...editedCourt, area: e.target.value })
-                      : setNewCourt({ ...newCourt, area: e.target.value })
-                  }
-                />
-              </div></div>
-              </div>
 
-              
               <div className="button-container">
                 <button
                   className="confirm-button"
