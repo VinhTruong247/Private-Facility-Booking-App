@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { postCreateUser, putUpdateUser, getAllUsers } from '../../../../services/userService';
+import {
+  postCreateUser,
+  putUpdateUser,
+  getAllUsers
+} from "../../../../services/userService";
 import styles from "./User.module.scss"; // Importing the SCSS module
 import { toast } from "react-toastify";
-
 
 const User = () => {
   const [users, setUsers] = useState([]);
@@ -17,7 +20,7 @@ const User = () => {
     address: "",
     phone: "",
     dob: "",
-    roleId: 0
+    roleId: ""
   });
 
   const togglePopup = () => {
@@ -28,39 +31,60 @@ const User = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewUser((prevState) => ({
-      ...prevState,
-      [name]: value
-    }));
-    setEditedUser((prevState) => ({
-      ...prevState,
-      [name]: value
-    }))
+    if (name === "dob") {
+      // Reformat dob to yyyy-mm-dd format
+      const formattedDob = new Date(value).toISOString().split("T")[0];
+      setNewUser((prevState) => ({
+        ...prevState,
+        [name]: formattedDob
+      }));
+      setEditedUser((prevState) => ({
+        ...prevState,
+        [name]: formattedDob
+      }));
+    } else {
+      setNewUser((prevState) => ({
+        ...prevState,
+        [name]: value
+      }));
+      setEditedUser((prevState) => ({
+        ...prevState,
+        [name]: value
+      }));
+    }
   };
 
   const handleConfirm = async () => {
     try {
       if (editMode) {
         await putUpdateUser(editedUser.id, editedUser);
-        setUsers(prevUsers => prevUsers.map(user => user.id === editedUser.id ? editedUser : user));
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.id === editedUser.id ? editedUser : user
+          )
+        );
         toast.success("User updated successfully.");
       } else {
-        await postCreateUser(newUser);
+        // Format dob before creating a new user
+        const formattedNewUser = {
+          ...newUser,
+          dob: new Date(newUser.dob).toISOString().split("T")[0]
+        };
+        await postCreateUser(formattedNewUser);
         toast.success("New user added successfully.");
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       toast.error("Failed to add new user.");
     }
     // Reset form fields and close popup
     setNewUser({
       username: "",
       email: "",
-      password: "",
       address: "",
       phone: "",
       dob: "",
-      roleId: 0
+      roleId: ""
     });
     togglePopup();
   };
@@ -76,13 +100,22 @@ const User = () => {
       try {
         const res = await getAllUsers({ pageSize: 20 });
         if (res.data && res.data.items) {
-          const sortedUsers = res.data.items.sort((a, b) => {
+          const formattedUsers = res.data.items.map((user) => {
+            // Extracting the date part from the dob string and formatting it
+            const dobDate = new Date(user.dob);
+            const formattedDob = dobDate.toISOString().split("T")[0];
+            return {
+              ...user,
+              dob: formattedDob
+            };
+          });
+          const sortedUsers = formattedUsers.sort((a, b) => {
             return a.username.localeCompare(b.username);
           });
           setUsers(sortedUsers);
         }
       } catch (error) {
-        console.error('Error fetching users:', error);
+        console.error("Error fetching users:", error);
       }
     };
 
@@ -90,7 +123,7 @@ const User = () => {
   }, []);
 
   return (
-    <div className={styles["users-container"]}>
+    <div className={styles["user-container"]}>
       <div className={styles["label-container"]}>
         <h2>Users</h2>
       </div>
@@ -98,14 +131,14 @@ const User = () => {
         {users.map((user) => (
           <div
             key={user.id}
-            className={styles["user"]}
+            className={styles["user-box"]}
             onClick={() =>
               setExpandedUser(expandedUser === user.id ? null : user.id)
             }
           >
             <div className={styles["user-name"]}>{user.username}</div>
             {expandedUser === user.id && (
-              <div className={styles["user-details"]}>
+              <div className={styles["full-info"]}>
                 <div>
                   <strong>Email:</strong> {user.email}
                 </div>
@@ -138,82 +171,80 @@ const User = () => {
         ))}
       </div>
 
-      <div className={styles["add-button"]} onClick={togglePopup}>+</div>
+      <div className={styles["add-button"]} onClick={togglePopup}>
+        +
+      </div>
 
       {showPopup && (
         <div className={styles["modal"]}>
           <div className={styles["popup-box"]}>
             <h2>{editMode ? "Edit User" : "Add User"}</h2>
             <form>
-              <div className={styles["form-group"]}>
-                <label htmlFor="username">Username:</label>
-                <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  value={editMode ? editedUser.username : newUser.username}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className={styles["form-group"]}>
-                <label htmlFor="email">Email:</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={editMode ? editedUser.email : newUser.email}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className={styles["form-group"]}>
-                <label htmlFor="password">Password:</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={editMode ? editedUser.password : newUser.password}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className={styles["form-group"]}>
-                <label htmlFor="address">Address:</label>
-                <input
-                  type="text"
-                  id="address"
-                  name="address"
-                  value={editMode ? editedUser.address : newUser.address}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className={styles["form-group"]}>
-                <label htmlFor="phone">Phone:</label>
-                <input
-                  type="text"
-                  id="phone"
-                  name="phone"
-                  value={editMode ? editedUser.phone : newUser.phone}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className={styles["form-group"]}>
-                <label htmlFor="dob">Date of Birth:</label>
-                <input
-                  type="date"
-                  id="dob"
-                  name="dob"
-                  value={editMode ? editedUser.dob : newUser.dob}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className={styles["form-group"]}>
-                <label htmlFor="roleId">Role ID:</label>
-                <input
-                  type="number"
-                  id="roleId"
-                  name="roleId"
-                  value={editMode ? editedUser.roleId : newUser.roleId}
-                  onChange={handleChange}
-                />
+              <div style={{ display: "flex" }}>
+                <div className={styles["input-column"]}>
+                  <div className={styles["input-group"]}>
+                    <label htmlFor="username">Username:</label>
+                    <input
+                      type="text"
+                      id="username"
+                      name="username"
+                      value={editMode ? editedUser.username : newUser.username}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className={styles["input-group"]}>
+                    <label htmlFor="email">Email:</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={editMode ? editedUser.email : newUser.email}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className={styles["input-group"]}>
+                    <label htmlFor="dob">Date of Birth:</label>
+                    <input
+                      type="date"
+                      id="dob"
+                      name="dob"
+                      value={editMode ? editedUser.dob : newUser.dob}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <div className={styles["input-column"]}>
+                  <div className={styles["input-group"]}>
+                    <label htmlFor="address">Address:</label>
+                    <input
+                      type="text"
+                      id="address"
+                      name="address"
+                      value={editMode ? editedUser.address : newUser.address}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className={styles["input-group"]}>
+                    <label htmlFor="phone">Phone:</label>
+                    <input
+                      type="text"
+                      id="phone"
+                      name="phone"
+                      value={editMode ? editedUser.phone : newUser.phone}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className={styles["input-group"]}>
+                    <label htmlFor="roleId">Role ID:</label>
+                    <input
+                      type="number"
+                      id="roleId"
+                      name="roleId"
+                      value={editMode ? editedUser.roleId : newUser.roleId}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
               </div>
               <div className={styles["button-container"]}>
                 <button
