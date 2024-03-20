@@ -1,262 +1,104 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { postCreateSlot, putUpdateSlot, getVinSlotList } from '../../../../services/vinSlotService';
+import { toast } from "react-toastify";
 import styles from "./VinSlot.module.scss";
 
 const VinSlot = () => {
+  const [vinSlots, setVinSlots] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
-  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [expandedVinSlot, setExpandedVinSlot] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [editedSlot, setEditedSlot] = useState(null);
-  const [newSlot, setNewSlot] = useState({
-    courtName: "",
-    sportType: "",
-    capacity: "",
-    status: "",
+  const [editedVinSlot, setEditedVinSlot] = useState(null);
+  const [newVinSlot, setNewVinSlot] = useState({
+    capacity: 0,
     beginAt: "",
     endAt: "",
-    createdByUsername: "",
-    createdByClub: ""
+    courtId: 0,
+    memberId: 0
   });
 
   const togglePopup = () => {
     setShowPopup(!showPopup);
     setEditMode(false); // Reset edit mode when closing the popup
-    setEditedSlot(null); // Reset edited slot data
-  };
-
-  const handleConfirm = () => {
-    if (editMode) {
-      // Handle edit action here
-      console.log("Edited Slot:", editedSlot);
-    } else {
-      // Handle add action here
-      console.log("New Slot:", newSlot);
-    }
-    // Reset the form and close the popup
-    setNewSlot({
-      courtName: "",
-      sportType: "",
-      capacity: "",
-      status: "",
-      beginAt: "",
-      endAt: "",
-      createdByUsername: "",
-      createdByClub: ""
-    });
-    togglePopup();
-  };
-
-  const handleSlotClick = (slot) => {
-    setSelectedSlot(selectedSlot === slot.id ? null : slot.id);
-  };
-
-
-  const handleCancel = () => {
-    // Reset the form and close the popup
-    setNewSlot({
-      courtName: "",
-      sportType: "",
-      capacity: "",
-      status: "",
-      beginAt: "",
-      endAt: "",
-      createdByUsername: "",
-      createdByClub: ""
-    });
-    togglePopup();
+    setEditedVinSlot(null); // Reset edited vin slot data
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewSlot({ ...newSlot, [name]: value });
-    setEditedSlot({ ...editedSlot, [name]: value });
+    setNewVinSlot((prevState) => ({
+      ...prevState,
+      [name]: value
+    }));
+    setEditedVinSlot((prevState) => ({
+      ...prevState,
+      [name]: value
+    }))
   };
-  const handleEdit = (slot) => {
-    setEditedSlot({
-      ...slot,
-      // Ensure all required fields are set, providing default values if necessary
-      courtName: slot.court.name || "",
-      sportType: slot.court.type || "",
-      createdByUsername: slot.createdBy.username || "",
-      createdByClub: slot.createdBy.club || ""
+
+  const handleConfirm = async () => {
+    try {
+      if (editMode) {
+        await putUpdateSlot(editedVinSlot.id, editedVinSlot);
+        setVinSlots(prevVinSlots => prevVinSlots.map(vinSlot => vinSlot.id === editedVinSlot.id ? editedVinSlot : vinSlot));
+        toast.success("Vin slot updated successfully.");
+      } else {
+        await postCreateSlot(newVinSlot);
+        toast.success("New vin slot added successfully.");
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error("Failed to add new vin slot.");
+    }
+    // Reset form fields and close popup
+    setNewVinSlot({
+      capacity: 0,
+      beginAt: "",
+      endAt: "",
+      courtId: 0,
+      memberId: 0
     });
+    togglePopup();
+  };
+
+  const handleEdit = (vinSlot) => {
+    setEditedVinSlot(vinSlot); // Update state with the vin slot being edited
     setEditMode(true);
     setShowPopup(true);
   };
 
-  const handleDelete = (slotId) => {
-    // Handle delete action here
-    console.log("Deleted Slot with ID:", slotId);
-  };
+  useEffect(() => {
+    const fetchVinSlots = async () => {
+      try {
+        const res = await getVinSlotList({ pageSize: 20 });
+        if (res.data && res.data.items) {
+          const sortedVinSlots = res.data.items.sort((a, b) => {
+            return a.beginAt.localeCompare(b.beginAt);
+          });
+          setVinSlots(sortedVinSlots);
+        }
+      } catch (error) {
+        console.error('Error fetching vin slots:', error);
+      }
+    };
 
-  const vinSlotsData = [
-    {
-      id: 106,
-      capacity: 10,
-      status: "ONGOING",
-      beginAt: "2024-03-12T13:00:00.708Z",
-      endAt: "2024-03-12T15:00:00.708Z",
-      court: {
-        name: "S8C4",
-        type: "Badminton"
-      },
-      createdBy: {
-        username: "Marisol26",
-        club: "Thunder Strikers FC"
-      }
-    },
-    {
-      id: 77,
-      capacity: 15,
-      status: "ONGOING",
-      beginAt: "2024-03-06T15:00:00.704Z",
-      endAt: "2024-03-06T17:00:00.704Z",
-      court: {
-        name: "S2C2",
-        type: "Basketball"
-      },
-      createdBy: {
-        username: "Marisol26",
-        club: "Thunder Strikers FC"
-      }
-    },
-    {
-      id: 87,
-      capacity: 20,
-      status: "ONGOING",
-      beginAt: "2024-03-08T15:00:00.706Z",
-      endAt: "2024-03-08T17:00:00.706Z",
-      court: {
-        name: "S2C1",
-        type: "Football"
-      },
-      createdBy: {
-        username: "Keely.Botsford26",
-        club: "Thunder Strikers FC"
-      }
-    },
-    {
-      id: 81,
-      capacity: 10,
-      status: "ONGOING",
-      beginAt: "2024-03-07T13:00:00.705Z",
-      endAt: "2024-03-07T15:00:00.705Z",
-      court: {
-        name: "S2C2",
-        type: "Basketball"
-      },
-      createdBy: {
-        username: "Josiah.Ruecker-Mayer",
-        club: "Thunder Strikers FC"
-      }
-    },
-    {
-      id: 94,
-      capacity: 20,
-      status: "ONGOING",
-      beginAt: "2024-03-10T09:00:00.707Z",
-      endAt: "2024-03-10T11:00:00.707Z",
-      court: {
-        name: "S3C2",
-        type: "Basketball"
-      },
-      createdBy: {
-        username: "Malinda.Bosco21",
-        club: "Blaze United"
-      }
-    },
-    {
-      id: 89,
-      capacity: 15,
-      status: "ONGOING",
-      beginAt: "2024-03-09T09:00:00.706Z",
-      endAt: "2024-03-09T11:00:00.706Z",
-      court: {
-        name: "S7C1",
-        type: "Football"
-      },
-      createdBy: {
-        username: "Alexie51",
-        club: "Rally Rovers"
-      }
-    },
-    {
-      id: 78,
-      capacity: 20,
-      status: "ONGOING",
-      beginAt: "2024-03-07T07:00:00.704Z",
-      endAt: "2024-03-07T09:00:00.704Z",
-      court: {
-        name: "S10C2",
-        type: "Basketball"
-      },
-      createdBy: {
-        username: "Braxton.Morar",
-        club: "Rally Rovers"
-      }
-    },
-    {
-      id: 75,
-      capacity: 20,
-      status: "ONGOING",
-      beginAt: "2024-03-06T11:00:00.703Z",
-      endAt: "2024-03-06T13:00:00.703Z",
-      court: {
-        name: "S10C1",
-        type: "Football"
-      },
-      createdBy: {
-        username: "Braxton.Morar",
-        club: "Rally Rovers"
-      }
-    },
-    {
-      id: 80,
-      capacity: 20,
-      status: "ONGOING",
-      beginAt: "2024-03-07T11:00:00.705Z",
-      endAt: "2024-03-07T13:00:00.705Z",
-      court: {
-        name: "S4C2",
-        type: "Basketball"
-      },
-      createdBy: {
-        username: "Keon.Upton",
-        club: "Eclipse Smashers"
-      }
-    },
-    {
-      id: 88,
-      capacity: 20,
-      status: "ONGOING",
-      beginAt: "2024-03-09T07:00:00.706Z",
-      endAt: "2024-03-09T09:00:00.706Z",
-      court: {
-        name: "S1C3",
-        type: "Volleyball"
-      },
-      createdBy: {
-        username: "Mae79",
-        club: "Aurora Spikers"
-      }
-    }
-    // Add more data as needed
-  ];
+    fetchVinSlots();
+  }, []);
 
- 
   return (
     <div className={styles["vin-slot-container"]}>
       <div className={styles["label-container"]}>
         <h2>Vin Slots</h2>
       </div>
       <div className={styles["vin-slot-list"]}>
-        {vinSlotsData.map((slot) => (
+      {vinSlots.map((slot) => (
           <div
             key={slot.id}
-            className={`${styles["vin-slot"]} ${
-              selectedSlot === slot.id ? styles["selected"] : ""
-            }`}
-            onClick={() => handleSlotClick(slot)}
+            className={styles["vin-slot"]}
+            onClick={() =>
+              setExpandedVinSlot(expandedVinSlot === slot.id ? null : slot.id)
+            }
           >
+            
             <div className={styles["slot-info"]}>
               <div>
                 <strong>Court:</strong> {slot.court.name}
@@ -265,7 +107,7 @@ const VinSlot = () => {
                 <strong>Type:</strong> {slot.court.type}
               </div>
             </div>
-            {selectedSlot === slot.id && (
+            {expandedVinSlot === slot.id && (
               <div className={styles["full-info"]}>
                 <div>
                   <strong>Capacity:</strong> {slot.capacity}
@@ -292,12 +134,6 @@ const VinSlot = () => {
                   >
                     Edit
                   </button>
-                  <button
-                    className={styles["delete-button"]}
-                    onClick={() => handleDelete(slot.id)}
-                  >
-                    Delete
-                  </button>
                 </div>
               </div>
             )}
@@ -319,7 +155,7 @@ const VinSlot = () => {
                   name="courtName"
                   id="courtName"
                   placeholder="Enter court name"
-                  value={editMode ? editedSlot.courtName : newSlot.courtName}
+                  value={editMode ? editedVinSlot.courtName : newVinSlot.courtName}
                   onChange={handleChange}
                 />
               </div>
@@ -331,7 +167,7 @@ const VinSlot = () => {
                   id="sportType"
                   placeholder="Enter sport type"
                   value={
-                    editMode ? editedSlot.sportType : newSlot.courtType
+                    editMode ? editedVinSlot.sportType : newVinSlot.courtType
                   }
                   onChange={handleChange}
                 />
@@ -343,7 +179,7 @@ const VinSlot = () => {
                   name="capacity"
                   id="capacity"
                   placeholder="Enter capacity"
-                  value={editMode ? editedSlot.capacity : newSlot.capacity}
+                  value={editMode ? editedVinSlot.capacity : newVinSlot.capacity}
                   onChange={handleChange}
                 />
               </div>
@@ -354,7 +190,7 @@ const VinSlot = () => {
                   name="status"
                   id="status"
                   placeholder="Enter status"
-                  value={editMode ? editedSlot.status : newSlot.status}
+                  value={editMode ? editedVinSlot.status : newVinSlot.status}
                   onChange={handleChange}
                 />
               </div>
@@ -365,7 +201,7 @@ const VinSlot = () => {
                   name="beginAt"
                   id="beginAt"
                   placeholder="Enter begin time"
-                  value={editMode ? editedSlot.beginAt : newSlot.beginAt}
+                  value={editMode ? editedVinSlot.beginAt : newVinSlot.beginAt}
                   onChange={handleChange}
                 />
               </div>
@@ -376,7 +212,7 @@ const VinSlot = () => {
                   name="endAt"
                   id="endAt"
                   placeholder="Enter end time"
-                  value={editMode ? editedSlot.endAt : newSlot.endAt}
+                  value={editMode ? editedVinSlot.endAt : newVinSlot.endAt}
                   onChange={handleChange}
                 />
               </div>
@@ -389,8 +225,8 @@ const VinSlot = () => {
                   placeholder="Enter username"
                   value={
                     editMode
-                      ? editedSlot.createdByUsername
-                      : newSlot.createdByUsername
+                      ? editedVinSlot.createdByUsername
+                      : newVinSlot.createdByUsername
                   }
                   onChange={handleChange}
                 />
@@ -403,7 +239,7 @@ const VinSlot = () => {
                   id="createdByClub"
                   placeholder="Enter club"
                   value={
-                    editMode ? editedSlot.createdByClub : newSlot.createdByClub
+                    editMode ? editedVinSlot.createdByClub : newVinSlot.createdByClub
                   }
                   onChange={handleChange}
                 />
@@ -419,7 +255,7 @@ const VinSlot = () => {
                 <button
                   className={styles["cancel-button"]}
                   type="button"
-                  onClick={handleCancel}
+                  onClick={togglePopup}
                 >
                   Cancel
                 </button>

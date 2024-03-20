@@ -8,7 +8,6 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useState } from "react";
-import jwt_decode from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../../assets/css/login.module.scss";
 import logoImage from "../../assets/images/logo.svg";

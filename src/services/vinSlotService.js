@@ -6,15 +6,7 @@ const postCreateSlot = async (data) => {
 
 const getVinSlotList = async (params) => {
     return await axios.get(
-        `/vin-slots?${params.status ? `status=${params.status}&` : ""
-        }
-    ${params.createdBy ? `createdBy=${params.createdBy}&` : ""}
-        ${params.courtId ? `courtId=${params.courtId}&` : ""}
-        ${params.current ? `current=${params.current}&` : ""}
-        ${params.pageSize ? `pageSize=${params.pageSize}&` : ""}
-        ${params.sortBy ? `sortBy=${params.sortBy}&` : ""}
-        ${params.sortDescending ? `sortDescending=${params.sortDescending}&` : ""
-        }`
+        `/vin-slots?${params.status ? `status=${params.status}&` : ""}${params.createdBy ? `createdBy=${params.createdBy}&` : ""}${params.courtId ? `courtId=${params.courtId}&` : ""}${params.current ? `current=${params.current}&` : ""}${params.pageSize ? `pageSize=${params.pageSize}&` : ""}${params.sortBy ? `sortBy=${params.sortBy}&` : ""}${params.sortDescending ? `sortDescending=${params.sortDescending}&` : ""}`
     );
 };
 
