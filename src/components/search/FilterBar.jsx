@@ -6,6 +6,8 @@ import {
   MenuItem,
   Select,
   FormControl,
+  Button,
+  Box,
 } from "@mui/material";
 
 const FilterBar = (props) => {
@@ -70,50 +72,69 @@ const FilterBar = (props) => {
     fetchAllCourts(1, value, selectedAreaId, searchValue);
   };
 
+  const handleClearFilters = () => {
+    setSelectedAreaId('');
+    setSelectedSportTypeId('');
+    setAreaId('');
+    setSportTypeId('');
+    setLoading(true);
+    fetchAllCourts(1, '', '', searchValue);
+  };
 
   return (
     <>
-      <div className="d-flex align-items-baseline justify-content-between">
-        <div style={{ fontWeight: 500, fontSize: "1.3em" }}>Filters</div>
+      <div className="filterBar">
+        <div className="filter-header">
+          <div className="filter-title">Filters</div>
+          <hr />
+        </div>
 
-        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-          <InputLabel id="area-select-label">Area</InputLabel>
-          <Select
-            labelId="area-select-label"
-            id="area-select"
-            value={selectedAreaId}
-            onChange={(e) => handleChangeArea(e.target.value)}
-            label="Area"
+        <div className="filter-options">
+          <FormControl variant="standard" className="filter-control">
+            <InputLabel id="area-select-label">Area</InputLabel>
+            <Select
+              labelId="area-select-label"
+              id="area-select"
+              value={selectedAreaId}
+              onChange={(e) => handleChangeArea(e.target.value)}
+              label="Area"
+              className="select-field"
+            >
+              {areas.map((area) => (
+                <MenuItem key={area.id} value={area.id}>
+                  {area.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl variant="standard" className="filter-control">
+            <InputLabel id="sport-type-select-label">Sport Types</InputLabel>
+            <Select
+              labelId="sport-type-select-label"
+              id="sport-type-select"
+              value={selectedSportTypeId}
+              onChange={(e) => handleChangeSportType(e.target.value)}
+              label="Sport Types"
+              className="select-field"
+            >
+              {sportTypes.map((sport) => (
+                <MenuItem key={sport.id} value={sport.id}>
+                  {sport.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <Button
+            variant="outlined"
+            onClick={handleClearFilters}
+            className="clear-button"
           >
-            {areas.map((area) => (
-              <MenuItem key={area.id} value={area.id}>
-                {area.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <hr />
-
-        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-          <InputLabel id="sport-type-select-label">Sport Types</InputLabel>
-          <Select
-            labelId="sport-type-select-label"
-            id="sport-type-select"
-            value={selectedSportTypeId}
-            onChange={(e) => handleChangeSportType(e.target.value)}
-            label="Sport Types"
-          >
-            {sportTypes.map((sport) => (
-              <MenuItem key={sport.id} value={sport.id}>
-                {sport.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+            Clear Filters
+          </Button>
+        </div>
       </div>
-
-      <hr />
     </>
   );
 };
