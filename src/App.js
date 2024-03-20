@@ -1,10 +1,8 @@
 import Router from "./router/Router";
 import './App.scss';
 import { ToastContainer } from "react-toastify";
-import { useDispatch } from "react-redux";
 
 function App() {
-  const dispatch = useDispatch();
 
   return (
     <div className="App">

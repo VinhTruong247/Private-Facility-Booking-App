@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Dashboard.scss";
 import Categories from "./Categories/Categories";
 import Courts from "./Courts/Courts";
