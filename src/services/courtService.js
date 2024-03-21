@@ -21,19 +21,21 @@ const getCourtInfo = async (id) => {
     return await axios.get(`/courts/${id}`);
 };
 
-const putUpdateCourt = async (id, data, file) => {
+const putUpdateCourt = async (id, data, file = null) => {
     const formData = new FormData();
-    
+
     // Append the court data
     Object.entries(data).forEach(([key, value]) => {
-        if (key !== 'id' && key !== 'sportType' && key !== 'area') { // Exclude unwanted properties
+        if (key !== 'id' && key !== 'sportType' && key !== 'area') {
             formData.append(key, value);
         }
     });
 
-    // Append the file data
+    // If a file is provided, append it; otherwise, include a placeholder file
     if (file) {
         formData.append('file', file);
+    } else {
+        formData.append('file', ''); // Placeholder file
     }
 
     return await axios.put(`/courts/${id}`, formData, {

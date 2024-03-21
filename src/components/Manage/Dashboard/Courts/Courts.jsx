@@ -22,11 +22,12 @@ const Courts = () => {
   });
   const [editedFile, setEditedFile] = useState(null); // State for edited file data
   const [newFile, setNewFile] = useState(null); // State for new file data
-
+  const [imagePreview, setImagePreview] = useState(null); // State for image preview
   const togglePopup = () => {
     setShowPopup(!showPopup);
     setEditMode(false); // Reset edit mode when closing the popup
     setEditedCourt(null); // Reset edited court data
+    setImagePreview(null); // Reset image preview
   };
 
   const handleCourtClick = (courtId) => {
@@ -40,7 +41,13 @@ const Courts = () => {
   const handleConfirm = async () => {
     try {
       if (editMode) {
-        await putUpdateCourt(editedCourt.id, editedCourt, editedFile); // Include editedFile here
+        // Check if file is provided before updating
+        if (editedFile !== null) {
+          await putUpdateCourt(editedCourt.id, editedCourt, editedFile);
+        } else {
+          // If file is not provided, update court data without file
+          await putUpdateCourt(editedCourt.id, editedCourt);
+        }
         setCourt((prevCourt) =>
           prevCourt.map((court) =>
             court.id === editedCourt.id ? editedCourt : court
@@ -48,9 +55,15 @@ const Courts = () => {
         );
         toast.success("Court updated successfully.");
       } else {
-        const res = await postCreateCourt({ ...newCourt, file: newFile }); // Include newFile here
-        const newCourtWithFile = res.data; // Assuming the response includes the updated court with file data
-        setCourt((prevCourt) => [...prevCourt, newCourtWithFile]);
+        // Check if new file is provided before creating a new court
+        if (newFile !== null) {
+          const res = await postCreateCourt({ ...newCourt, file: newFile });
+          const newCourtWithFile = res.data;
+          setCourt((prevCourt) => [...prevCourt, newCourtWithFile]);
+        } else {
+          // If file is not provided, create new court without file
+          await postCreateCourt(newCourt);
+        }
         toast.success("New court added successfully.");
       }
     } catch (error) {
@@ -100,6 +113,9 @@ const Courts = () => {
     setEditedCourt(court);
     setEditMode(true);
     setShowPopup(true);
+    if (court.image) {
+      setImagePreview(URL.createObjectURL(court.image));
+    }
   };
 
   const handleDelete = async (courtId) => {
@@ -268,6 +284,11 @@ const Courts = () => {
                 </div>
                 {/* File Input */}
                 <div className="form-group">
+                  {imagePreview && (
+                    <div className="image-preview">
+                      <img src={imagePreview} alt="Court" />
+                    </div>
+                  )}
                   <label htmlFor="court-file">File:</label>
                   <input
                     type="file"

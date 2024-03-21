@@ -22,12 +22,47 @@ const User = () => {
     dob: "",
     roleId: ""
   });
+  const rolesMap = {
+    ADMIN: 4,
+    Something: 10,
+    USER: 2,
+    VIN_MEMBER: 3
+  };
 
   const togglePopup = () => {
     setShowPopup(!showPopup);
     setEditMode(false); // Reset edit mode when closing the popup
     setEditedUser(null); // Reset edited user data
   };
+  // State to store role options for select dropdown
+  const [roleOptions, setRoleOptions] = useState([]);
+
+  // Function to convert role name into roleId
+  const getRoleIdByName = (roleName) => {
+    return rolesMap[roleName];
+  };
+  const handleRoleChange = (e) => {
+    const roleName = e.target.value;
+    const roleId = getRoleIdByName(roleName);
+    setNewUser((prevState) => ({
+      ...prevState,
+      roleId, // Update roleId instead of role
+      role: roleName // Update role with the selected role name
+    }));
+    setEditedUser((prevState) => ({
+      ...prevState,
+      roleId, // Update roleId instead of role
+      role: roleName // Update role with the selected role name
+    }));
+  };
+  useEffect(() => {
+    // Populate role options
+    const options = Object.keys(rolesMap).map((roleName) => ({
+      value: roleName,
+      label: roleName
+    }));
+    setRoleOptions(options);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -235,16 +270,22 @@ const User = () => {
                     />
                   </div>
                   <div className={styles["input-group"]}>
-                    <label htmlFor="roleId">Role ID:</label>
-                    <input
-                      type="number"
-                      id="roleId"
-                      name="roleId"
-                      value={editMode ? editedUser.roleId : newUser.roleId}
-                      onChange={handleChange}
-                    />
+                    <label htmlFor="role">Role:</label>
+                    {/* Select dropdown for role */}
+                    <select
+                      id="role"
+                      name="role"
+                      value={editMode ? editedUser.role : newUser.role}
+                      onChange={handleRoleChange}
+                    >
+                      {roleOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                </div>
+                  </div>
               </div>
               <div className={styles["button-container"]}>
                 <button
@@ -265,6 +306,7 @@ const User = () => {
             </form>
           </div>
         </div>
+        
       )}
     </div>
   );

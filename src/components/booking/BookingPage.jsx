@@ -1,58 +1,199 @@
-import React, { useState, useEffect } from 'react';
-import "./BookingStyle.scss"
+import React, { useState, useEffect } from "react";
+import "./BookingStyle.scss";
+import { postCreateSlot } from "../../services/vinSlotService";
+import { getAllMembers } from "../../services/memberService";
+import { getCourtList } from "../../services/courtService";
 
-function BookingPage(props) {
-  const [facilities, setFacilities] = useState([]);
-  const [selectedFacility, setSelectedFacility] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+function BookingPage({ memberId, ...props }) {
+  const [capacity, setCapacity] = useState(0);
+  const [beginAt, setBeginAt] = useState("");
+  const [endAt, setEndAt] = useState("");
+  const [courtId, setCourtId] = useState(0);
+  const [memberIdInput, setMemberIdInput] = useState(memberId || "");
+  const [members, setMembers] = useState([]);
+  const [courts, setCourts] = useState([]);
+  const [confirmationData, setConfirmationData] = useState(null);
+  const [loading, setLoading] = useState(true); // Track loading state
+  const [showConfirmation, setShowConfirmation] = useState(false); // State variable to control confirmation form visibility
 
   useEffect(() => {
-    const facilitiesData = [
-      { id: 1, name: 'Basketball Court', location: 'Central Park' },
-      { id: 2, name: 'Meeting Room', location: 'Main Office' },
-      { id: 3, name: 'Conference Room', location: 'Building A' },
-    ];
-    setFacilities(facilitiesData);
+    async function fetchData() {
+      try {
+        const membersResponse = await getAllMembers({});
+        console.log("Members response:", membersResponse);
+        setMembers(membersResponse.data.items); // Assuming members are nested under a 'members' key
+
+        const courtsResponse = await getCourtList({});
+        console.log("Courts response:", courtsResponse);
+        setCourts(courtsResponse.data.items); // Assuming courts are nested under a 'courts' key
+
+        setLoading(false); // Data fetching completed
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false); // Set loading to false even if there's an error
+      }
+    }
+
+    fetchData();
   }, []);
 
-  const handleFacilityChange = (event) => {
-    setSelectedFacility(facilities.find((facility) => facility.id === parseInt(event.target.value)));
+  const handleMemberChange = (selectedMemberId) => {
+    setMemberIdInput(selectedMemberId);
   };
 
-  const handleDateChange = (event) => {
-    setSelectedDate(new Date(event.target.value));
+  const handleCourtChange = (selectedCourtId) => {
+    setCourtId(selectedCourtId);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(`Booking submitted for facility ${selectedFacility.name} on ${selectedDate.toLocaleDateString()}`);
+  
+    // Validate capacity
+    if (!capacity || capacity <= 0) {
+      alert("Please provide a valid capacity.");
+      return;
+    }
+  
+    // Validate beginAt
+    if (!beginAt) {
+      alert("Please provide a valid begin date and time.");
+      return;
+    }
+  
+    // Validate endAt
+    if (!endAt) {
+      alert("Please provide a valid end date and time.");
+      return;
+    }
+  
+    // Validate courtId
+    if (!courtId) {
+      alert("Please select a court.");
+      return;
+    }
+  
+    // Validate memberIdInput
+    if (!memberIdInput || isNaN(memberIdInput.trim())) {
+      alert("Please provide a valid member ID.");
+      return;
+    }
+  
+    try {
+      const response = await postCreateSlot({
+        capacity: capacity,
+        beginAt: beginAt,
+        endAt: endAt,
+        courtId: courtId,
+        memberId: parseInt(memberIdInput)
+      });
+  
+      // Store booked slot details for confirmation
+      setConfirmationData(response.data);
+  
+      // Reset form fields after successful booking
+      setCapacity("");
+      setBeginAt("");
+      setEndAt("");
+      setCourtId(0);
+      setMemberIdInput("");
+    } catch (error) {
+      console.error("Error creating slot:", error);
+      alert("Failed to create slot. Please try again.");
+    }
+  };
+  
+
+  const handleCloseConfirmation = () => {
+    setShowConfirmation(false); // Hide confirmation form
+    setConfirmationData(null); // Reset confirmation data
   };
 
   return (
     <div className="booking-container">
       <h1>Book a Facility</h1>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="facility">Select Facility:</label>
-        <select id="facility" name="facility" value={selectedFacility?.id || ''} onChange={handleFacilityChange}>
-          <option value="">-- Select Facility --</option>
-          {facilities.map((facility) => (
-            <option key={facility.id} value={facility.id}>
-              {facility.name} ({facility.location})
-            </option>
-          ))}
+        <label htmlFor="capacity">Capacity:</label>
+        <input
+          type="number"
+          id="capacity"
+          name="capacity"
+          value={capacity}
+          onChange={(e) => setCapacity(e.target.value)}
+        />
+
+        <label htmlFor="beginAt">Begin At:</label>
+        <input
+          type="datetime-local"
+          id="beginAt"
+          name="beginAt"
+          value={beginAt}
+          onChange={(e) => setBeginAt(e.target.value)}
+        />
+
+        <label htmlFor="endAt">End At:</label>
+        <input
+          type="datetime-local"
+          id="endAt"
+          name="endAt"
+          value={endAt}
+          onChange={(e) => setEndAt(e.target.value)}
+        />
+
+        <label htmlFor="courtId">Court:</label>
+        <select
+          id="courtId"
+          name="courtId"
+          value={courtId}
+          onChange={(e) => handleCourtChange(e.target.value)}
+        >
+          <option value="">Select Court</option>
+          {loading ? (
+            <option disabled>Loading courts...</option>
+          ) : (
+            courts &&
+            courts.map((court) => (
+              <option key={court.id} value={court.id}>
+                {court.name}
+              </option>
+            ))
+          )}
         </select>
 
-        <label htmlFor="date">Select Date:</label>
-        <input type="date" id="date" name="date" value={selectedDate.toISOString().split('T')[0]} onChange={handleDateChange} />
+        <label htmlFor="memberId">Member:</label>
+        <select
+          id="memberId"
+          name="memberId"
+          value={memberIdInput}
+          onChange={(e) => handleMemberChange(e.target.value)}
+        >
+          <option value="">Select Member</option>
+          {loading ? (
+            <option disabled>Loading members...</option>
+          ) : (
+            members &&
+            members.map((member) => (
+              <option key={member.id} value={member.id}>
+                {member.user}
+              </option>
+            ))
+          )}
+        </select>
 
         <button type="submit">Book</button>
       </form>
 
-      {selectedFacility && (
-        <div className="facility-details">
-          <h2>Selected Facility Details</h2>
-          <p>Name: {selectedFacility.name}</p>
-          <p>Location: {selectedFacility.location}</p>
+      {/* Confirmation form */}
+
+      {showConfirmation && (
+        <div className="confirmation-overlay">
+          <div className="confirmation-modal">
+            <h2>Booking Confirmation</h2>
+            <p>ID: {confirmationData?.id}</p>
+            <p>Status: {confirmationData?.status}</p>
+            <p>Created At: {confirmationData?.createdAt}</p>
+            <p>Updated At: {confirmationData?.updatedAt}</p>
+            <button onClick={handleCloseConfirmation}>Close</button>
+          </div>
         </div>
       )}
     </div>

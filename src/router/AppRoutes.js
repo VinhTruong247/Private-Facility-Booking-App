@@ -8,6 +8,7 @@ import BookingPage from "../components/booking/BookingPage";
 import SearchCourseResult from "../components/search/searchCourseResult";
 import ProtectedRoute from "./ProtectedRoute";
 import CourtDetailsPage from "../components/search/CourtDetailPage"; // Import the CourtDetailsPage component
+import Summary from "../components/Manage/Executive Summary/Summary";
 
 const AppRoutes = [
   {
@@ -51,6 +52,10 @@ const AppRoutes = [
       {
         path: "",
         element: <DashboardPage />,
+      },
+      {
+        path: "summary",
+        element: <Summary/>,
       },
     ],
   },
