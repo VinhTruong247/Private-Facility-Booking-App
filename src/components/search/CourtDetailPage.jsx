@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Import Link
+import { useParams, useNavigate } from "react-router-dom";
 import { Container, Typography, Card, IconButton } from "@mui/material";
 import { getCourtInfo } from "../../services/courtService";
-import { ArrowBack } from "@mui/icons-material"; // Import ArrowBack icon
+import { ArrowBack } from "@mui/icons-material";
 import "./SearchCourseResult.scss";
 
 const CourtDetailsPage = () => {
   const { id } = useParams();
-
   const [courtData, setCourtData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate(); // Use navigate hook
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourtDetails = async () => {
@@ -68,9 +67,13 @@ const CourtDetailsPage = () => {
             <b>Area:</b> {courtData.area}
           </Typography>
           <Typography variant="body1" gutterBottom className="availability">
-            <b>Availability:</b>{" "}
-            <span>{courtData.isAvailable ? "Available" : "Not Available"}</span>
+            <b>Availability:</b> <span>{courtData.isAvailable ? "Available" : "Not Available"}</span>
           </Typography>
+          {courtData.file && (
+            <div className="image-container">
+              <img src={courtData.file.url} alt="Court" className="court-image" />
+            </div>
+          )}
         </Container>
       </Card>
     </div>

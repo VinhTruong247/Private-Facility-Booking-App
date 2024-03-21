@@ -1,5 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { postCreateCourt, getCourtList, putUpdateCourt, deleteCourt } from '../../../../services/courtService';
+import React, { useEffect, useState } from "react";
+import {
+  postCreateCourt,
+  getCourtList,
+  putUpdateCourt,
+  deleteCourt
+} from "../../../../services/courtService";
 import { toast } from "react-toastify";
 import "./Courts.scss";
 
@@ -15,6 +20,9 @@ const Courts = () => {
     sportTypeId: 0,
     areaId: 0
   });
+  const [editedFile, setEditedFile] = useState(null); // State for edited file data
+  const [newFile, setNewFile] = useState(null); // State for new file data
+
   const togglePopup = () => {
     setShowPopup(!showPopup);
     setEditMode(false); // Reset edit mode when closing the popup
@@ -32,16 +40,22 @@ const Courts = () => {
   const handleConfirm = async () => {
     try {
       if (editMode) {
-        await putUpdateCourt(editedCourt.id, editedCourt);
-        setCourt(prevCourt => prevCourt.map(court => court.id === editedCourt.id ? editedCourt : court));
+        await putUpdateCourt(editedCourt.id, editedCourt, editedFile); // Include editedFile here
+        setCourt((prevCourt) =>
+          prevCourt.map((court) =>
+            court.id === editedCourt.id ? editedCourt : court
+          )
+        );
         toast.success("Court updated successfully.");
       } else {
-        await postCreateCourt(newCourt);
+        const res = await postCreateCourt({ ...newCourt, file: newFile }); // Include newFile here
+        const newCourtWithFile = res.data; // Assuming the response includes the updated court with file data
+        setCourt((prevCourt) => [...prevCourt, newCourtWithFile]);
         toast.success("New court added successfully.");
       }
     } catch (error) {
-      console.error('Error:', error);
-      toast.error("Failed to add new court.");
+      console.error("Error:", error);
+      toast.error("Failed to add/update court.");
     }
     // Reset the form and close the popup
     setNewCourt({
@@ -50,6 +64,8 @@ const Courts = () => {
       sportTypeId: 0,
       areaId: 0
     });
+    setEditedCourt(null);
+    setEditMode(false);
     togglePopup();
   };
 
@@ -65,7 +81,7 @@ const Courts = () => {
           setCourt(res.data.items);
         }
       } catch (error) {
-        console.error('Error fetching areas:', error);
+        console.error("Error fetching areas:", error);
       }
     };
 
@@ -85,12 +101,13 @@ const Courts = () => {
     setEditMode(true);
     setShowPopup(true);
   };
+
   const handleDelete = async (courtId) => {
     try {
       const res = await deleteCourt(courtId);
       if (res.succeeded) {
         toast.success("Delete successfully");
-        const updatedCourt = courts.filter(court => court.id !== courtId);
+        const updatedCourt = courts.filter((court) => court.id !== courtId);
         setCourt(updatedCourt);
       } else {
         toast.error(res.message);
@@ -99,6 +116,7 @@ const Courts = () => {
       toast.error("Failed to delete area.");
     }
   };
+
   return (
     <div className="courts-container">
       <div className="label-container">
@@ -172,9 +190,9 @@ const Courts = () => {
                       onChange={(e) =>
                         editMode
                           ? setEditedCourt({
-                            ...editedCourt,
-                            name: e.target.value
-                          })
+                              ...editedCourt,
+                              name: e.target.value
+                            })
                           : setNewCourt({ ...newCourt, name: e.target.value })
                       }
                     />
@@ -192,41 +210,43 @@ const Courts = () => {
                       onChange={(e) =>
                         editMode
                           ? setEditedCourt({
-                            ...editedCourt,
-                            sportType: e.target.value
-                          })
+                              ...editedCourt,
+                              sportType: e.target.value
+                            })
                           : setNewCourt({
-                            ...newCourt,
-                            sportType: e.target.value
-                          })
+                              ...newCourt,
+                              sportType: e.target.value
+                            })
                       }
                     />
                   </div>
                 </div>
-                <div className="column-group"><div className="form-group">
-                  <label htmlFor="court-description">Description:</label>
-                  <input
-                    type="text"
-                    id="court-description"
-                    name="description"
-                    placeholder="Enter Description"
-                    value={
-                      editMode ? editedCourt.description : newCourt.description
-                    }
-                    onChange={(e) =>
-                      editMode
-                        ? setEditedCourt({
-                          ...editedCourt,
-                          description: e.target.value
-                        })
-                        : setNewCourt({
-                          ...newCourt,
-                          description: e.target.value
-                        })
-                    }
-                  />
-                </div>
-
+                <div className="column-group">
+                  <div className="form-group">
+                    <label htmlFor="court-description">Description:</label>
+                    <input
+                      type="text"
+                      id="court-description"
+                      name="description"
+                      placeholder="Enter Description"
+                      value={
+                        editMode
+                          ? editedCourt.description
+                          : newCourt.description
+                      }
+                      onChange={(e) =>
+                        editMode
+                          ? setEditedCourt({
+                              ...editedCourt,
+                              description: e.target.value
+                            })
+                          : setNewCourt({
+                              ...newCourt,
+                              description: e.target.value
+                            })
+                      }
+                    />
+                  </div>
                   <div className="form-group">
                     <label htmlFor="court-area">Area:</label>
                     <input
@@ -237,13 +257,29 @@ const Courts = () => {
                       value={editMode ? editedCourt.area : newCourt.area}
                       onChange={(e) =>
                         editMode
-                          ? setEditedCourt({ ...editedCourt, area: e.target.value })
+                          ? setEditedCourt({
+                              ...editedCourt,
+                              area: e.target.value
+                            })
                           : setNewCourt({ ...newCourt, area: e.target.value })
                       }
                     />
-                  </div></div>
+                  </div>
+                </div>
+                {/* File Input */}
+                <div className="form-group">
+                  <label htmlFor="court-file">File:</label>
+                  <input
+                    type="file"
+                    id="court-file"
+                    name="file"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      editMode ? setEditedFile(file) : setNewFile(file);
+                    }}
+                  />
+                </div>
               </div>
-
 
               <div className="button-container">
                 <button
