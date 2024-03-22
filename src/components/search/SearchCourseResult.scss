@@ -256,60 +256,86 @@ $bgColor: #f7f7f7;
   }
 }
 // CourtDetailsPage.scss
-
-// CourtDetailsPage.scss
-
 .container {
-    margin-top: 4rem;
-    padding: 2rem;
-  
-    .header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-  
+  margin-top: 2rem;
+  padding: 0 1rem;
+  margin-bottom: 4rem;
+
+  .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+
     .back-button {
-      font-size: 2rem; /* Adjust button size */
-      margin-right: 1rem; /* Add margin between button and title */
+      font-size: 1.5rem;
     }
-  
+
     .title {
-        color: #1976d2;
-        margin: 0;
-        flex-grow: 1; /* Allow title to grow and occupy remaining space */
-        text-align: center; /* Center align the title */
-        font-weight: 700;
-      }
-  
-    .card {
-      max-width: 800px;
-      margin: auto;
-      padding: 3rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      border: 1px solid #ccc;
+      color: #1976d2;
+      margin: 0;
+      flex-grow: 1;
+      text-align: center;
+      font-weight: 700;
     }
-  
+  }
+
+  .card {
+    max-width: 800px;
+    margin: auto;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+
     .description {
       font-style: italic;
       margin-bottom: 1.5rem;
     }
-  
-    .sport-type,
-    .area,
-    .availability {
+
+    .info {
       margin-bottom: 1rem;
+
+      b {
+        margin-right: 0.5rem;
+      }
     }
-  
-    .availability span {
+
+    .available {
       color: #4caf50;
     }
-  
-    .loading {
-      margin-top: 2rem;
-      font-size: 1.2rem;
+
+    .not-available {
+      color: #f44336;
+    }
+
+    .image-container {
+      margin-top: 1.5rem;
       text-align: center;
+
+      .court-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+      
     }
   }
-  
+
+  .loading-spinner {
+    display: block;
+    margin: 4rem auto;
+  }
+
+  .no-data-text {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    text-align: center;
+    color: #f44336;
+  }
+}

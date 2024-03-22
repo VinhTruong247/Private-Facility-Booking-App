@@ -1,34 +1,21 @@
 import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
-import { useNavigate } from "react-router";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logoutAPI } from "../../services/authService";
 import { logout } from "../../redux/slices/authSlice";
 import { toast } from "react-toastify";
 import TopNavbar from "./TopNavbar/TopNavbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTachometerAlt,
-  faChartLine,
-  faCogs,
-  faFileAlt,
-  faBuilding,
-  faSignOutAlt,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-  faCalendarCheck as farCalendarCheck,
-  faUserCircle as farUserCircle,
-  faCalendarAlt as farCalendarAlt,
-  faLifeRing as farLifeRing,
-} from "@fortawesome/free-regular-svg-icons";
+import { faTachometerAlt, faChartLine, faSignOutAlt, faHome } from "@fortawesome/free-solid-svg-icons";
+import { faCalendarAlt as farCalendarAlt } from "@fortawesome/free-regular-svg-icons";
 import "./SideBar.scss";
-import "./Manage.scss"
+import "./Manage.scss";
 
 export default function Manage() {
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showSignoutPopup, setShowSignoutPopup] = useState(false);
+  const [activeItem, setActiveItem] = useState("Dashboard");
 
   const handleSignoutClick = () => {
     setShowSignoutPopup(true);
@@ -49,12 +36,24 @@ export default function Manage() {
     }
   };
 
+  const handleSidebarItemClick = (itemName) => {
+    setActiveItem(itemName);
+    if (itemName === "Dashboard") {
+      navigate("/manage");
+    } else if (itemName === "Executive Summary") {
+      navigate("/manage/summary");
+    }
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <TopNavbar />
       {showSignoutPopup && (
         <div className="overlay" onClick={handleCancelSignout}>
-          <div className="signout-popup" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="signout-popup"
+            onClick={(e) => e.stopPropagation()}
+          >
             <p>Are you sure you want to sign out?</p>
             <div className="button-container">
               <button className="confirm-button" onClick={handleLogout}>
@@ -67,9 +66,13 @@ export default function Manage() {
           </div>
         </div>
       )}
-      <div style={{ display: "flex", height:"80vh" }}>
-        <Sidebar handleSignoutClick={handleSignoutClick} />
-        <div className="page-container" style={{width:"100%"}} >
+      <div style={{ display: "flex", height: "80vh" }}>
+        <Sidebar
+          handleSignoutClick={handleSignoutClick}
+          activeItem={activeItem}
+          handleSidebarItemClick={handleSidebarItemClick}
+        />
+        <div className="page-container" style={{ width: "100%" }}>
           <div className="content-body">
             <Outlet />
           </div>
@@ -79,25 +82,16 @@ export default function Manage() {
   );
 }
 
-function Sidebar({ handleSignoutClick }) {
-  const handleSidebarItemClick = (itemName) => {
-    setActiveItem(itemName);
-  };
-  const [activeItem, setActiveItem] = useState("Dashboard");
-
+function Sidebar({ handleSignoutClick, activeItem, handleSidebarItemClick }) {
   return (
     <div className="sidebar">
       <div
-        className={`sidebar-item ${activeItem === "Dashboard" ? "active" : ""}`}
+        className={`sidebar-item ${
+          activeItem === "Dashboard" ? "active" : ""
+        }`}
         onClick={() => handleSidebarItemClick("Dashboard")}
       >
         <FontAwesomeIcon icon={faTachometerAlt} /> Dashboard
-      </div>
-      <div
-        className={`sidebar-item ${activeItem === "Calendar" ? "active" : ""}`}
-        onClick={() => handleSidebarItemClick("Calendar")}
-      >
-        <FontAwesomeIcon icon={farCalendarAlt} /> Calendar
       </div>
       <div
         className={`sidebar-item ${
@@ -107,52 +101,17 @@ function Sidebar({ handleSignoutClick }) {
       >
         <FontAwesomeIcon icon={faChartLine} /> Executive Summary
       </div>
-      <div
-        className={`sidebar-item ${activeItem === "Setup" ? "active" : ""}`}
-        onClick={() => handleSidebarItemClick("Setup")}
-      >
-        <FontAwesomeIcon icon={faCogs} /> Setup
-      </div>
-      <div
-        className={`sidebar-item ${activeItem === "Reports" ? "active" : ""}`}
-        onClick={() => handleSidebarItemClick("Reports")}
-      >
-        <FontAwesomeIcon icon={faFileAlt} /> Reports
-      </div>
-      <div
-        className={`sidebar-item ${
-          activeItem === "Reservations" ? "active" : ""
-        }`}
-        onClick={() => handleSidebarItemClick("Reservations")}
-      >
-        <FontAwesomeIcon icon={farCalendarCheck} /> Reservations
-      </div>
-      <div
-        className={`sidebar-item ${
-          activeItem === "Facilitron Works" ? "active" : ""
-        }`}
-        onClick={() => handleSidebarItemClick("Facilitron Works")}
-      >
-        <FontAwesomeIcon icon={faBuilding} /> Facilitron Works
-      </div>
-      <div
-        className={`sidebar-item ${activeItem === "Support" ? "active" : ""}`}
-        onClick={() => handleSidebarItemClick("Support")}
-      >
-        <FontAwesomeIcon icon={farLifeRing} /> Support
-      </div>
-      <hr />
-      <div
-        className={`sidebar-item ${
-          activeItem === "Other Accounts" ? "active" : ""
-        }`}
-        onClick={() => handleSidebarItemClick("Other Accounts")}
-      >
-        <FontAwesomeIcon icon={farUserCircle} /> Other Accounts
-      </div>
       <div className="line"></div>
       <div
-        className={`sidebar-item ${activeItem === "Sign Out" ? "active" : ""}`}
+        className={`sidebar-item`}
+        onClick={() => (window.location.href = "/")}
+      >
+        <FontAwesomeIcon icon={faHome} /> Home
+      </div>
+      <div
+        className={`sidebar-item ${
+          activeItem === "Sign Out" ? "active" : ""
+        }`}
         onClick={handleSignoutClick}
       >
         <FontAwesomeIcon icon={faSignOutAlt} /> Sign Out

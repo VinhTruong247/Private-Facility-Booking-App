@@ -1,0 +1,26 @@
+/* Summary.scss */
+
+.summary-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.summary-box {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 0 10px;
+  text-align: center;
+  width: 200px;
+}
+
+.summary-box h3 {
+  margin-bottom: 10px;
+}
+
+.summary-box p.count {
+  font-size: 24px;
+  font-weight: bold;
+}

@@ -8,7 +8,7 @@ const SearchBar = (props) => {
   const { style1, style2 } = props;
 
   const SearchIconWrapper = styled("div")(({ theme }) => ({
-    padding: theme.spacing(0, 2),
+    padding: theme.spacing(0, 1), // Adjusted padding
     height: "100%",
     position: "absolute",
     pointerEvents: "none",
@@ -27,11 +27,9 @@ const SearchBar = (props) => {
     marginLeft: 0,
     width: "100%",
     [theme.breakpoints.down("lg")]: {
-      marginLeft: theme.spacing(1),
-      width: "50%",
+      width: "40%", // Adjusted width for smaller screens
     },
     [theme.breakpoints.up("lg")]: {
-      marginLeft: theme.spacing(1),
       width: "auto",
     },
   }));
@@ -39,19 +37,18 @@ const SearchBar = (props) => {
   const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: "inherit",
     "& .MuiInputBase-input": {
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+      padding: theme.spacing(1), // Adjusted padding
+      paddingLeft: `calc(1em + ${theme.spacing(3)})`, // Adjusted padding
       transition: theme.transitions.create("width"),
       width: "100%",
       [theme.breakpoints.up("md")]: {
-        width: "45ch",
+        width: "30ch", // Adjusted width
         "&:focus": {
-          width: "55ch",
+          width: "50ch", // Adjusted width
         },
       },
       [theme.breakpoints.down("sm")]: {
-        width: "25ch",
+        width: "20ch", // Adjusted width
       },
     },
   }));

@@ -1,44 +1,99 @@
 .booking-container {
-    background-color: #f2f2f2 (light gray);
+    background-color: #f2f2f2; // Light gray background
     width: 100%;
     padding: 20px;
-    border: 1px solid #ddd (light gray);
+    border: 1px solid #ddd; // Light gray border
     border-radius: 5px;
-}
-
-h1 {
-    text-align: center;
-    margin: 0 0 20px 0;
-}
-
-h2 {
-    text-align: center;
-    margin: 0 0 10px 0;
-}
-
-label {
-    font-size: 16px;
-    font-family: arial, sans-serif;
-    color: #333 (dark gray);
-    margin: 0 0 5px 0;
-}
-
-select,
-input[type="date"] {
+  
+    h1 {
+      text-align: center;
+      margin: 0 0 20px 0;
+    }
+  
+    h2 {
+      text-align: center;
+      margin: 0 0 10px 0;
+    }
+  
+    label {
+      font-size: 16px;
+      font-family: Arial, sans-serif;
+      color: #333; // Dark gray color
+      margin: 0 0 5px 0;
+    }
+  
+    select,
+    input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc; // Light gray border
+      border-radius: 3px;
+    }
+  
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+  
+    button {
+      background-color: #4caf50; // Teal color
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  
+      &:hover {
+        background-color: #45a049; // Darker shade of teal on hover
+      }
+    }
+  
+    .success-message {
+      text-align: center;
+      background-color: #dff0d8; // Light green background for success message
+      color: #3c763d; // Dark green color
+      padding: 10px;
+      margin-top: 20px;
+      border-radius: 5px;
+    }
+  
+    .facility-details {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #fff; // White background for facility details
+      border: 1px solid #ccc; // Light gray border
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Subtle shadow
+    }
+  
+    p {
+      margin: 0 0 5px 0;
+    }
+  }
+  .booking-container {
+    /* Your existing styles */
+  
+    position: relative; /* Ensure proper positioning of the confirmation overlay */
+  }
+  
+  .confirmation-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc (light gray);
-    border-radius: 3px;
-}
-
-button {
-    background-color: #4CAF50 (teal);
-    color: white;
-    padding: 10px 20px;
-    border: none;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .confirmation-modal {
+    background-color: #fff;
+    padding: 20px;
     border-radius: 5px;
-}
-
-p {
-    margin: 0 0 5px 0;
-}
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
